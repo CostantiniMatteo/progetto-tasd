@@ -1,0 +1,19 @@
+users/ GET, POST, PUT, DELETE
+users/{user_id}/ GET, PUT, DELETE
+users/{user_id}/skills/ GET, POST, PUT, DELETE
+users/{user_id}/suggestions/ GET
+users/{user_id}/applications/ GET, POST
+users/{user_id}/applications/{application_id}/ GET, PUT, DELETE
+
+[Alternativa users/...]
+centers/ GET, POST
+centers/{center_id}/ GET, PUT, DELETE
+centers/{center_id}/jobs/ GET, POST
+centers/{center_id}/jobs/{job_id}/ GET, PUT, DELETE
+
+jobs/ GET, POST
+jobs/{job_id}/ GET, PUT, DELETE
+jobs/search?q={query} GET
+
+applications/ GET
+applications/{application_id}/ GET, PUT, DELETE
