@@ -3,7 +3,7 @@
 This project aims to build an application for search and apply job offers, built with a microservice architecture.
 
 # Architecture
-![alt](Diagrams/Microservice%20progetto.png)
+![alt](docs/Microservice%20progetto.png)
 
 The service API Gateway is the service responsible of [responsibility], and exposes API for [functionalities].  
 The service Job Center is the service responsible of [responsibility], and exposes API for [functionalities].  
