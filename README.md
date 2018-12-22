@@ -11,7 +11,7 @@ The service Job is the service responsible of managing job insertions, and expos
 The service Job Seeker is the service responsible of browsing job insertions, and exposes API for job search.  
 The service Application is the service responsible of managing users' applications to jobs, and exposes CRUD API for managing applications.  
 The service Notification is the service responsible of notifying users of application confirmation and new job insertions, and exposes API to send emails using Google Mail API.  
-The service Job Advisor is the service responsible of computing skills-based suggestions, and exposes API for provide job suggestions to the seeker.  
+The service Job Advisor is the service responsible of computing skills-based suggestions, and exposes API to provide job suggestions to the seeker.  
 The service Seeker is the service responsible of managing users, and exposes CRUD API for users.  
 
 ### Prerequisites
