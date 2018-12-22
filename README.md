@@ -5,14 +5,14 @@ This project aims to build an application for search and apply job offers, built
 # Architecture
 ![alt](docs/Microservice%20progetto.png)
 
-The service API Gateway is the service responsible of [responsibility], and exposes API for [functionalities].  
-The service Job Center is the service responsible of [responsibility], and exposes API for [functionalities].  
-The service Job is the service responsible of [responsibility], and exposes API for [functionalities].  
-The service Job Seeker is the service responsible of [responsibility], and exposes API for [functionalities].  
-The service Application is the service responsible of [responsibility], and exposes API for [functionalities].  
-The service Notification is the service responsible of [responsibility], and exposes API for [functionalities].  
-The service Job Advisor is the service responsible of [responsibility], and exposes API for [functionalities].  
-The service Seeker is the service responsible of [responsibility], and exposes API for [functionalities].  
+The service API Gateway is the service responsible of dispatching web requests, authentication, authorization and filtering, and exposes application's API.  
+The service Job Center is the service responsible of managing job centers, and exposes CRUD API for jobs centers.  
+The service Job is the service responsible of managing job insertions, and exposes CRUD API for job insertions.  
+The service Job Seeker is the service responsible of browsing job insertions, and exposes API for job search.  
+The service Application is the service responsible of managing users' applications to jobs, and exposes CRUD API for managing jobs.  
+The service Notification is the service responsible of notifying users of application confirmation and new job insertions, and exposes API to send emails using Google Mail API.  
+The service Job Advisor is the service responsible of computing skills-based suggestions, and exposes API for provide job suggestions to the seeker.  
+The service Seeker is the service responsible of managing users, and exposes CRUD API for users.  
 
 ### Prerequisites
 
@@ -53,9 +53,9 @@ Add additional notes about how to deploy this on a live system
 ## Authors
 
 * **Andrea Biaggi** - 794873
-* **Matteo Costantini** - [Matricola]
-* **Lorenzo Di Vito** - [Matricola]
-* **Dario Gerosa** - [Matricola]
+* **Matteo Costantini** - 795125
+* **Lorenzo Di Vito** - 793128
+* **Dario Gerosa** - 793636
 
 ## License
 
