@@ -1,4 +1,4 @@
-package com.tasd.jobcenter;
+package com.tasd.jobcenters;
 
 import java.util.Optional;
 

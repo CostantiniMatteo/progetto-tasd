@@ -1,4 +1,4 @@
-package com.tasd.jobcenter;
+package com.tasd.jobcenters;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 

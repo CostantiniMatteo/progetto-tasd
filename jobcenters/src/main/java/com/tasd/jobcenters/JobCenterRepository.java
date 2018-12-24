@@ -1,4 +1,4 @@
-package com.tasd.jobcenter;
+package com.tasd.jobcenters;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

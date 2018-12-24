@@ -1,0 +1,53 @@
+version: "3.2"
+
+services:
+  eurekaregistry:
+    build:
+      context: ../eurekaregistry
+      dockerfile: eurekaregistry.Dockerfile
+    image: eurekaregistry
+    container_name: eurekaregistry
+    environment:
+      - SPRING_PROFILES_ACTIVE=peer1
+      - LOGGING_LEVEL_COM_NETFLIX_DISCOVERY=DEBUG
+    ports:
+      - 8761:8761
+    networks:
+      - progetto-tasd
+
+  centersdb:
+    image: postgres
+    container_name: centersdb
+    environment:
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - 5432:5432
+    networks:
+      - progetto-tasd
+
+  jobcenters:
+    build:
+      context: ../jobcenters
+      dockerfile: jobcenters.Dockerfile
+    image: jobcenters
+    container_name: jobcenters
+    ports:
+      - 8200:8200
+    networks:
+      - progetto-tasd
+    depends_on:
+      - centersdb
+      - eurekaregistry
+    restart: on-failure
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - progetto-tasd
+
+networks:
+  progetto-tasd:
+
