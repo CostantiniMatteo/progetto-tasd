@@ -13,14 +13,14 @@ public class JobCenterController {
 	@Autowired
 	JobCenterRepository jobCenterRepository;
 	
-	@RequestMapping(value = "/centers", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/centers", method = RequestMethod.POST)
 	public JobCenterEntity createInstance() {
 		JobCenterEntity jobCenterEntity = new JobCenterEntity(2);
 		jobCenterRepository.save(jobCenterEntity);
 		return jobCenterEntity;
 	}
 	//TODO NECESSARIO RITORNARE STATUS 404
-	@RequestMapping(value = "/centers/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/centers/{id}", method = RequestMethod.GET)
 	public JobCenterEntity getJobCenter(@PathVariable long id) {
 		return jobCenterRepository.findById(id).get();
 	}

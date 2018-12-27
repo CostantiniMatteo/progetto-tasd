@@ -1,0 +1,9 @@
+zuul:
+  routes:
+    auth:
+      path: /auth/**
+      stripPrefix: false
+      sensitiveHeaders: Cookie,Set-Cookie
+    jobcenters:
+      path: /api/centers/*
+      stripPrefix: false
