@@ -84,14 +84,18 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 		
 		// A (temporary) class just to represent the user credentials
 		private static class UserCredentials {
-		    private String username, password;
-
+		    private String username, password, role;
+		    
 			public String getUsername() {
 				return username;
 			}
 
 			public String getPassword() {
 				return password;
+			}
+			
+			public String getRole() {
+				return role;
 			}
 		}
 
