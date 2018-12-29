@@ -1,9 +1,19 @@
 zuul:
   routes:
     auth:
-      path: /auth/**
+      path: /token/**
       stripPrefix: false
       sensitiveHeaders: Cookie,Set-Cookie
+    users:
+      path: /users/**
+      stripPrefix: false
+      sensitiveHeaders: Cookie,Set-Cookie
+      serviceId: auth
+    signup:
+      path: /signup
+      stripPrefix: false
+      sensitiveHeaders: Cookie,Set-Cookie
+      serviceId: auth
     jobcenters:
       path: /api/centers/*
       stripPrefix: false
