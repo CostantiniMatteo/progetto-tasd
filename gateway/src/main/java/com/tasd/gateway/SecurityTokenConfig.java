@@ -35,10 +35,9 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter{
 		   // Any other request must be authenticated
 		   .anyRequest().authenticated();
 
-		/*http.cors().and().csrf().disable().
-				authorizeRequests()
-				.antMatchers("/token/*", "/signup").permitAll()
-				.anyRequest().authenticated();*/
+		/*http
+				.addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class);*/
+
 	}
 	
 	@Bean

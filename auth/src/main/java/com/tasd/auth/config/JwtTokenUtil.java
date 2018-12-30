@@ -4,14 +4,17 @@ import com.tasd.auth.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.tasd.auth.model.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
 import static com.tasd.auth.model.Constants.SIGNING_KEY;
@@ -33,10 +36,16 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(SIGNING_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+        Claims t = null;
+        try {
+            t = Jwts.parser()
+                    .setSigningKey(SIGNING_KEY.getBytes("UTF-8"))
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return t;
     }
 
     private Boolean isTokenExpired(String token) {
@@ -45,22 +54,28 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateToken(User user) {
-        return doGenerateToken(user.getUsername());
+        return doGenerateToken(user);
     }
 
     //TODO: scoprire come funzionano i ruoli di spring
-    private String doGenerateToken(String subject) {
+    private String doGenerateToken(User user) {
 
-        Claims claims = Jwts.claims().setSubject(subject);
-        claims.put("scopes", Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
+        claims.put("authorities", new ArrayList<String>() {{add(user.getRole().name());}});
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuer("http://devglan.com")
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS*1000))
-                .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
-                .compact();
+        String t = null;
+        try{
+            t = Jwts.builder()
+                    .setClaims(claims)
+                    .setIssuer("http://devglan.com")
+                    .setIssuedAt(new Date(System.currentTimeMillis()))
+                    .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS*1000))
+                    .signWith(SignatureAlgorithm.HS256, SIGNING_KEY.getBytes("UTF-8"))
+                    .compact();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return t;
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

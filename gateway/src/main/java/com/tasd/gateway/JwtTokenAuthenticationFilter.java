@@ -51,7 +51,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter{
 			
 			// 4. Validate the token
 			Claims claims = Jwts.parser()
-					.setSigningKey(jwtConfig.getSecret().getBytes())
+					.setSigningKey(jwtConfig.getSecret().getBytes("UTF-8"))
 					.parseClaimsJws(token)
 					.getBody();
 			
@@ -65,7 +65,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter{
 				// It needs a list of authorities, which has type of GrantedAuthority interface, where SimpleGrantedAuthority is an implementation of that interface
 				 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
 								 username, null, authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-				 
 				 // 6. Authenticate the user
 				 // Now, user is authenticated
 				 SecurityContextHolder.getContext().setAuthentication(auth);
