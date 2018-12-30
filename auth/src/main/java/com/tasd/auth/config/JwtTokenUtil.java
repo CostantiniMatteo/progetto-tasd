@@ -36,16 +36,10 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        Claims t = null;
-        try {
-            t = Jwts.parser()
-                    .setSigningKey(SIGNING_KEY.getBytes("UTF-8"))
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return t;
+        return Jwts.parser()
+                .setSigningKey(SIGNING_KEY)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -70,7 +64,7 @@ public class JwtTokenUtil implements Serializable {
                     .setIssuer("http://devglan.com")
                     .setIssuedAt(new Date(System.currentTimeMillis()))
                     .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS*1000))
-                    .signWith(SignatureAlgorithm.HS256, SIGNING_KEY.getBytes("UTF-8"))
+                    .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
                     .compact();
         } catch (Exception e){
             e.printStackTrace();

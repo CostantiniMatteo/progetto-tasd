@@ -51,7 +51,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter{
 			
 			// 4. Validate the token
 			Claims claims = Jwts.parser()
-					.setSigningKey(jwtConfig.getSecret().getBytes("UTF-8"))
+					.setSigningKey(jwtConfig.getSecret())
 					.parseClaimsJws(token)
 					.getBody();
 			
