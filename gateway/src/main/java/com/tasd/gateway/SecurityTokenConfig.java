@@ -18,11 +18,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
   	protected void configure(HttpSecurity http) throws Exception {
-    	 /*  http
+    	 http
 		.csrf().disable()
-			.authorizeRequests()
-				   .antMatchers("/token/*", "/signup").permitAll()
-				   .and()
 		    // make sure we use stateless session; session won't be used to store user's state.
 	 	    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
@@ -34,14 +31,14 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter{
 		// authorization requests config
 		.authorizeRequests()
 		   // allow all who are accessing "auth" service
-		   .antMatchers(HttpMethod.POST, "/signup").permitAll()
+		   .antMatchers(HttpMethod.POST, "/token/*", "/signup").permitAll()
 		   // Any other request must be authenticated
-		   .anyRequest().authenticated();*/
+		   .anyRequest().authenticated();
 
-		http.cors().and().csrf().disable().
+		/*http.cors().and().csrf().disable().
 				authorizeRequests()
 				.antMatchers("/token/*", "/signup").permitAll()
-				.anyRequest().authenticated();
+				.anyRequest().authenticated();*/
 	}
 	
 	@Bean
