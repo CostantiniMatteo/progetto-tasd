@@ -1,4 +1,5 @@
-version: "3.2"
+# version: "3.2"
+version: "2.1"
 
 services:
   eurekaregistry:
@@ -10,12 +11,63 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=peer1
       - LOGGING_LEVEL_COM_NETFLIX_DISCOVERY=DEBUG
-    ports:
-      - 8761:8761
     expose:
       - 8761
+    ports:
+      - 8761:8761
     networks:
       - progetto-tasd
+
+  gateway:
+    build:
+      context: ../gateway
+      dockerfile: gateway.Dockerfile
+    image: gateway
+    container_name: gateway
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    networks:
+      - progetto-tasd
+    depends_on:
+      - eurekaregistry
+    restart: on-failure
+
+  authdb:
+    image: postgres
+    container_name: authdb
+    environment:
+      - POSTGRES_PASSWORD=1234
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    networks:
+      - progetto-tasd
+    healthcheck:
+      test: "exit 0"
+
+  auth:
+    build:
+      context: ../auth
+      dockerfile: auth.Dockerfile
+    image: auth
+    container_name: auth
+    expose:
+      - 9100
+    ports:
+      - 9100:9100
+    networks:
+      - progetto-tasd
+    depends_on:
+      authdb:
+        condition:
+          service_healthy
+      eurekaregistry:
+        condition:
+          service_started
+    restart: on-failure
 
   centersdb:
     image: postgres
@@ -25,9 +77,11 @@ services:
     expose:
       - 5432
     ports:
-      - 5432:5432
+      - 5433:5432
     networks:
       - progetto-tasd
+    healthcheck:
+      test: "exit 0"
 
   jobcenters:
     build:
@@ -41,24 +95,23 @@ services:
       - 8200:8200
     networks:
       - progetto-tasd
-    links:
-      - eurekaregistry:eurekaregistry
     depends_on:
-      - centersdb
-      - eurekaregistry
+      centersdb:
+        condition:
+          service_healthy
+      eurekaregistry:
+        condition:
+          service_started
     restart: on-failure
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-    expose:
-      - 8080
-    networks:
-      - progetto-tasd
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   expose:
+  #     - 8080
+  #   networks:
+  #     - progetto-tasd
 
 networks:
   progetto-tasd:
     driver: bridge
-
