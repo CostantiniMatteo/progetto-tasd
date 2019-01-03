@@ -1,10 +1,16 @@
 FROM maven:3.6-jdk-8-alpine as build
-COPY . /home/eurekaregistry
-WORKDIR /home/eurekaregistry
-VOLUME /Users/lorenzodivito/.m2:/root/.m2
-RUN mvn clean install -DskipTests
+VOLUME $HOME/.m2:/root/.m2
+
+RUN mkdir --parents /usr/src/app
+WORKDIR /usr/src/app
+
+ADD pom.xml /usr/src/app
+RUN mvn verify clean --fail-never
+
+ADD . /usr/src/app
+RUN mvn install -DskipTests
 
 FROM openjdk:8-jre-alpine
-COPY --from=build /home/eurekaregistry/target/eurekaregistry-0.0.1-SNAPSHOT.jar /app/eurekaregistry.jar
-EXPOSE 8760-8770
-ENTRYPOINT ["/usr/bin/java", "-jar", "/app/eurekaregistry.jar"]
+COPY --from=build /usr/src/app/target/eurekaregistry-0.0.1-SNAPSHOT.jar /app/app.jar
+EXPOSE 8200
+ENTRYPOINT ["/usr/bin/java", "-jar", "/app/app.jar"]
