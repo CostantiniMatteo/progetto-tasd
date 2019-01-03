@@ -1,0 +1,43 @@
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header mdl-layout--fixed-tabs">
+      <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row">
+          {% block name_page %}{% endblock %}
+          <div class="mdl-layout-spacer"></div>
+        </div>
+          {% block tabs %}{% endblock %}
+      </header>
+      <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+        <header class="demo-drawer-header header">
+          <img src="{{ url_for('static', filename='images/user.jpg') }}" class="logoclub">
+          <div class="demo-avatar-dropdown user-name">
+            <span>{{user.first_name}} {{user.last_name}}</span>
+          </div>
+        </header>
+        <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+          <a class="mdl-navigation__link" href="">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>
+            Home
+          </a>
+
+
+          <a class="mdl-navigation__link" href="">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">person</i>
+            Personal Data
+          </a>
+          <a class="mdl-navigation__link" href="">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">exit_to_app</i>
+            Logout
+          </a>
+        </nav>
+
+      </div>
+
+      <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-grid logo-club-div">
+          <div class="mdl-layout-spacer"></div>
+            <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center ">
+              <img src="" class="logo-club-main">
+            </div>
+            <div class="mdl-layout-spacer"></div>
+        </div>
+        <div class='main-div'>
