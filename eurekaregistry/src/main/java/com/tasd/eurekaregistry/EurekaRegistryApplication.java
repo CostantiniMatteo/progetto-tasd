@@ -9,7 +9,7 @@ public class EurekaRegistryApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EurekaRegistryApplication.class, args);
-	}
+    }
 
 }
 

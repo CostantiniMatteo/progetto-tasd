@@ -11,6 +11,6 @@ ADD . /usr/src/app
 RUN mvn install -DskipTests
 
 FROM openjdk:8-jre-alpine
-COPY --from=build /usr/src/app/target/jobcenter-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY --from=build /usr/src/app/target/gateway-0.0.1-SNAPSHOT.jar /app/app.jar
 EXPOSE 8200
 ENTRYPOINT ["/usr/bin/java", "-jar", "/app/app.jar"]
