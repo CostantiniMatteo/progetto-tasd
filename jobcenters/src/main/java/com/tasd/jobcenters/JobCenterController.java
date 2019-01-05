@@ -26,7 +26,7 @@ public class JobCenterController {
 	public ResponseEntity<JobCenterEntity> createInstance(@ModelAttribute JobCenterEntity jobCenterEntity) throws URISyntaxException {
 		if(jobCenterRepository.findByName(jobCenterEntity.getName()) == null) {
 			jobCenterRepository.save(jobCenterEntity);
-			return ResponseEntity.created(new URI("/api/centers")).body(jobCenterEntity);
+			return ResponseEntity.created(new URI("/api/centers" + jobCenterEntity.getId())).body(jobCenterEntity);
 		}
 		return ResponseEntity.status(HttpStatus.CONFLICT).build();
 	}
