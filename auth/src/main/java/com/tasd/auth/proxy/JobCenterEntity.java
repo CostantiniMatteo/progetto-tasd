@@ -1,21 +1,16 @@
-package com.tasd.jobcenters;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+package com.tasd.auth.proxy;
 
-@Entity
 public class JobCenterEntity {
-	
-	@Id
+
 	private long id;
 	private String name;
 
 	public JobCenterEntity() {
 	}
 	
-	public JobCenterEntity(long id) {
+	public JobCenterEntity(long id, String name) {
 		this.id = id;
+		this.name = name;
 	}
 
 	public long getId() {

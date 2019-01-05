@@ -1,19 +1,25 @@
 package com.tasd.auth.service;
 
 import com.tasd.auth.model.User;
+import com.tasd.auth.model.UserAdmin;
+import com.tasd.auth.model.UserCenter;
 import com.tasd.auth.model.UserDto;
+import com.tasd.auth.model.UserGeneral;
+import com.tasd.auth.model.UserSeeker;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 public interface UserService {
 
-    User save(UserDto user);
+    ResponseEntity<User> save(UserGeneral user);
     List<User> findAll();
-    void delete(int id);
+    void delete(long id);
 
     User findOne(String username);
 
-    User findById(int id);
+    User findById(long id);
 
     UserDto update(UserDto userDto);
 }

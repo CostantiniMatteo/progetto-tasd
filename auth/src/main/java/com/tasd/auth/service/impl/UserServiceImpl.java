@@ -1,11 +1,14 @@
 package com.tasd.auth.service.impl;
 
-import com.tasd.auth.dao.UserDao;
-import com.tasd.auth.model.User;
-import com.tasd.auth.model.UserDto;
-import com.tasd.auth.service.UserService;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,17 +16,26 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import com.tasd.auth.dao.UserRepo;
+import com.tasd.auth.model.User;
+import com.tasd.auth.model.UserAdmin;
+import com.tasd.auth.model.UserCenter;
+import com.tasd.auth.model.UserDto;
+import com.tasd.auth.model.UserGeneral;
+import com.tasd.auth.model.UserSeeker;
+import com.tasd.auth.proxy.CenterEntityProxy;
+import com.tasd.auth.proxy.JobCenterEntity;
+import com.tasd.auth.service.UserService;
 
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
 	
 	@Autowired
-	private UserDao userDao;
+	private CenterEntityProxy centerEntityProxy;
+	
+	@Autowired
+	private UserRepo userDao;
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
@@ -47,7 +59,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	@Override
-	public void delete(int id) {
+	public void delete(long id) {
 		userDao.deleteById(id);
 	}
 
@@ -57,7 +69,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	@Override
-	public User findById(int id) {
+	public User findById(long id) {
 		Optional<User> optionalUser = userDao.findById(id);
 		return optionalUser.isPresent() ? optionalUser.get() : null;
 	}
@@ -73,13 +85,32 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User save(UserDto user) {
+    public ResponseEntity<User> save(UserGeneral user) {
 	    User newUser = new User();
 	    newUser.setUsername(user.getUsername());
-	    newUser.setFirstName(user.getFirstName());
-	    newUser.setLastName(user.getLastName());
 	    newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 		newUser.setRole(user.getRole());
-        return userDao.save(newUser);
+		if((!userDao.existsByUsername(user.getUsername())) && (!centerEntityProxy.existsCenter(user.getCenterName()))) {
+			User newUserSave = userDao.save(newUser);
+			user.setId(newUserSave.getId());
+			dispatchUser(user);
+			return ResponseEntity.ok().body(newUserSave);
+		}
+		else {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
     }
+  
+    public void dispatchUser(UserGeneral user) {
+    	if(user.getRole().equals(User.Role.JOB_CENTER)) {
+    		centerEntityProxy.createCenter(new JobCenterEntity(user.getId(), user.getCenterName()));
+    	}
+    	else if(user.getRole().equals(User.Role.SEEKER)) {
+    		
+    	}
+    	else if(user.getRole().equals(User.Role.ADMIN)) {
+    		
+    	}
+    }
+    
 }

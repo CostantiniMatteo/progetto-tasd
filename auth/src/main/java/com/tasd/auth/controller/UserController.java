@@ -2,10 +2,14 @@ package com.tasd.auth.controller;
 
 import com.tasd.auth.model.ApiResponse;
 import com.tasd.auth.model.User;
+import com.tasd.auth.model.User.Role;
+import com.tasd.auth.model.UserCenter;
 import com.tasd.auth.model.UserDto;
+import com.tasd.auth.model.UserGeneral;
 import com.tasd.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +23,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
     public ApiResponse<List<User>> listUser(){
         return new ApiResponse<>(HttpStatus.OK.value(), "User list fetched successfully.",userService.findAll());
     }
-    @PreAuthorize("hasRole('SEEKER')")
+   
     @GetMapping("/users/{id}")
     public ApiResponse<User> getOne(@PathVariable int id){
         return new ApiResponse<>(HttpStatus.OK.value(), "User fetched successfully.",userService.findById(id));
@@ -42,10 +45,9 @@ public class UserController {
     }
 
     @RequestMapping(value="/signup", method = RequestMethod.POST)
-    public User saveNewUser(@RequestBody UserDto user){
+    public ResponseEntity<User> saveNewUser(@RequestBody UserGeneral user){
         return userService.save(user);
     }
-
-
+    
 
 }

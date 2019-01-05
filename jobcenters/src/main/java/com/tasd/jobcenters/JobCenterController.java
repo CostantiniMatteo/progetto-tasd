@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,12 +24,9 @@ public class JobCenterController {
 	JobCenterRepository jobCenterRepository;
 
 	@RequestMapping(value = "/api/centers", method = RequestMethod.POST)
-	public ResponseEntity<JobCenterEntity> createInstance(@ModelAttribute JobCenterEntity jobCenterEntity) throws URISyntaxException {
-		if(jobCenterRepository.findByName(jobCenterEntity.getName()) == null) {
-			jobCenterRepository.save(jobCenterEntity);
-			return ResponseEntity.created(new URI("/api/centers" + jobCenterEntity.getId())).body(jobCenterEntity);
-		}
-		return ResponseEntity.status(HttpStatus.CONFLICT).build();
+	public ResponseEntity<JobCenterEntity> createInstance(@RequestBody JobCenterEntity jobCenterEntity) throws URISyntaxException {
+		jobCenterRepository.save(jobCenterEntity);
+		return ResponseEntity.created(new URI("/api/centers" + jobCenterEntity.getId())).body(jobCenterEntity);
 	}
 	
 	@RequestMapping(value = "/api/centers", method = RequestMethod.GET)
@@ -47,6 +45,11 @@ public class JobCenterController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		
+	}
+	
+	@RequestMapping(value = "/api/centers/exists/{name}", method = RequestMethod.GET)
+	public boolean existsCenter(@PathVariable String name) {
+		return jobCenterRepository.existsByName(name);
 	}
 	
 	@RequestMapping(value = "/api/centers/{id}", method = RequestMethod.DELETE)
