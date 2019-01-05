@@ -5,16 +5,11 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -56,7 +51,13 @@ public class JobCenterController {
 	public void deleteJobCenter(@PathVariable long id) {
 		jobCenterRepository.deleteById(id);
 	}
-	
+
+	// PROVA
+	@RequestMapping(value = "/api/centers/{name}/jobs", method = RequestMethod.GET)
+	public void newJobs(@RequestHeader("X-User-Header") String logged_user, @PathVariable String name) {
+		System.out.println(logged_user);
+		System.out.println(name);
+	}
 	
 	
 }
