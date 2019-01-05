@@ -83,6 +83,20 @@ services:
     healthcheck:
       test: "exit 0"
 
+  jobsdb:
+    image: postgres
+    container_name: jobsdb
+    environment:
+      - POSTGRES_PASSWORD=1234
+    expose:
+      - 5432
+    ports:
+      - 5434:5432
+    networks:
+      - progetto-tasd
+    healthcheck:
+      test: "exit 0"
+
   jobcenters:
     build:
       context: ../jobcenters
