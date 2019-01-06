@@ -8,12 +8,27 @@ import javax.persistence.Id;
 public class JobCenterEntity {
 	
 	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long id;
-	private String name;
+	private String username;
 
-	public JobCenterEntity() {
+	private String name;
+	public JobCenterEntity(String name, String username) {
+		this.name = name;
+		this.username = username;
 	}
 	
+	public JobCenterEntity() {
+		
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public JobCenterEntity(long id) {
 		this.id = id;
 	}

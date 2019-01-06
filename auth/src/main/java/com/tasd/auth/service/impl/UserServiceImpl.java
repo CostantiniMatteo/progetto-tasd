@@ -90,9 +90,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	    newUser.setUsername(user.getUsername());
 	    newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 		newUser.setRole(user.getRole());
-		if((!userDao.existsByUsername(user.getUsername())) && (!centerEntityProxy.existsCenter(user.getCenterName()))) {
+		if((!userDao.existsByUsername(user.getUsername())) && user.getCenterName() != null && (!centerEntityProxy.existsCenter(user.getCenterName()))) {
 			User newUserSave = userDao.save(newUser);
-			user.setId(newUserSave.getId());
 			dispatchUser(user);
 			return ResponseEntity.ok().body(newUserSave);
 		}
@@ -103,7 +102,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
   
     public void dispatchUser(UserGeneral user) {
     	if(user.getRole().equals(User.Role.JOB_CENTER)) {
-    		centerEntityProxy.createCenter(new JobCenterEntity(user.getId(), user.getCenterName()));
+    		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername()));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
     		

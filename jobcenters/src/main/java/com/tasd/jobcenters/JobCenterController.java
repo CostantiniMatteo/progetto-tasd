@@ -52,7 +52,7 @@ public class JobCenterController {
 		jobCenterRepository.deleteById(id);
 	}
 
-	// PROVA
+	// PROVA sei una gioia
 	@RequestMapping(value = "/api/centers/{name}/jobs", method = RequestMethod.GET)
 	public void newJobs(@RequestHeader("X-User-Header") String logged_user, @PathVariable String name) {
 		System.out.println(logged_user);
