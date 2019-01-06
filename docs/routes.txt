@@ -10,12 +10,12 @@ centers/
 GET: permette al seeker di vedere quali centri sono registrati
 POST: permette al job center di registrarsi
 
+
 centers/{center_id}/ GET, PUT, DELETE
 centers/{center_id}/jobs/ GET, POST
 centers/{center_id}/jobs/{job_id}/ GET, PUT, DELETE
 
-jobs/ GET, POST
-jobs/{job_id}/ GET, PUT, DELETE
+# SEEKER SERVICE
 jobs/search?q={query} GET
 
 applications/ GET
