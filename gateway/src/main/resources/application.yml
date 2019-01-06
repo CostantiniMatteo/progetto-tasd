@@ -15,5 +15,8 @@ zuul:
       sensitiveHeaders: Cookie,Set-Cookie
       serviceId: auth
     jobcenters:
-      path: /api/centers/**
+      path: /api/centers/*
+      stripPrefix: false
+    jobs:
+      path: /api/centers/*/jobs
       stripPrefix: false

@@ -8,9 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class JobsEntity {
+public class JobEntity {
 
-	private long idCenter;
+	private String username;
 	private String position;
 	private String jobDescription;
 	private String location;
@@ -25,12 +25,6 @@ public class JobsEntity {
 	}
 	public void setId(long id) {
 		this.id = id;
-	}
-	public long getIdCenter() {
-		return idCenter;
-	}
-	public void setIdCenter(long idCenter) {
-		this.idCenter = idCenter;
 	}
 	public String getPosition() {
 		return position;
@@ -61,6 +55,12 @@ public class JobsEntity {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	

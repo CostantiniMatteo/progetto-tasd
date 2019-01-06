@@ -20,6 +20,5 @@ public class GatewayApplication {
 		return new UserFilter();
 	}
 
-
 }
 

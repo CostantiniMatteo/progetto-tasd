@@ -42,21 +42,14 @@ public class JobCenterController {
 		
 	}
 	
-	@RequestMapping(value = "/api/centers/exists/{name}", method = RequestMethod.GET)
-	public boolean existsCenter(@PathVariable String name) {
-		return jobCenterRepository.existsByName(name);
+	@RequestMapping(value = "/api/centers/{centerName}", method = RequestMethod.GET)
+	public boolean existsCenter(@PathVariable String centerName) {
+		return jobCenterRepository.existsByName(centerName);
 	}
 	
 	@RequestMapping(value = "/api/centers/{id}", method = RequestMethod.DELETE)
 	public void deleteJobCenter(@PathVariable long id) {
 		jobCenterRepository.deleteById(id);
-	}
-
-	// PROVA sei una gioia
-	@RequestMapping(value = "/api/centers/{name}/jobs", method = RequestMethod.GET)
-	public void newJobs(@RequestHeader("X-User-Header") String logged_user, @PathVariable String name) {
-		System.out.println(logged_user);
-		System.out.println(name);
 	}
 	
 	

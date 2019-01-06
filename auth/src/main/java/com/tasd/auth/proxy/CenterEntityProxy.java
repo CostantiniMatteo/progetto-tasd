@@ -18,6 +18,6 @@ public interface CenterEntityProxy {
 	@RequestMapping(value = "/api/centers", method = RequestMethod.POST)
 	public void createCenter(@RequestBody JobCenterEntity jobCenterEntity);
 
-	@RequestMapping(value="/api/centers/exists/{centerName}", method = RequestMethod.GET)
+	@RequestMapping(value="/api/centers/{centerName}", method = RequestMethod.GET)
 	public boolean existsCenter(@PathVariable("centerName") String centerName);
 }
