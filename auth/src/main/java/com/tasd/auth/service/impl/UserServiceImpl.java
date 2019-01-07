@@ -18,13 +18,12 @@ import org.springframework.stereotype.Service;
 
 import com.tasd.auth.dao.UserRepo;
 import com.tasd.auth.model.User;
-import com.tasd.auth.model.UserAdmin;
-import com.tasd.auth.model.UserCenter;
 import com.tasd.auth.model.UserDto;
 import com.tasd.auth.model.UserGeneral;
-import com.tasd.auth.model.UserSeeker;
 import com.tasd.auth.proxy.CenterEntityProxy;
 import com.tasd.auth.proxy.JobCenterEntity;
+import com.tasd.auth.proxy.SeekerEntity;
+import com.tasd.auth.proxy.SeekerEntityProxy;
 import com.tasd.auth.service.UserService;
 
 
@@ -33,6 +32,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	
 	@Autowired
 	private CenterEntityProxy centerEntityProxy;
+	
+	@Autowired
+	private SeekerEntityProxy seekerEntityProxy;
 	
 	@Autowired
 	private UserRepo userDao;
@@ -90,12 +92,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	    newUser.setUsername(user.getUsername());
 	    newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 		newUser.setRole(user.getRole());
-		if((!userDao.existsByUsername(user.getUsername())) && user.getCenterName() != null && (!centerEntityProxy.existsCenter(user.getCenterName()))) {
+		if (!userDao.existsByUsername(user.getUsername())) {
 			User newUserSave = userDao.save(newUser);
 			dispatchUser(user);
 			return ResponseEntity.ok().body(newUserSave);
-		}
-		else {
+		} else {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
     }
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername()));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
-    		
+    		seekerEntityProxy.createSeeker(new SeekerEntity());
     	}
     	else if(user.getRole().equals(User.Role.ADMIN)) {
     		

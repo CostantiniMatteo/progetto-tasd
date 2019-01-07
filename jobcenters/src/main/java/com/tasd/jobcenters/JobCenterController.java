@@ -42,11 +42,6 @@ public class JobCenterController {
 		
 	}
 	
-	@RequestMapping(value = "/api/centers/{centerName}", method = RequestMethod.GET)
-	public boolean existsCenter(@PathVariable String centerName) {
-		return jobCenterRepository.existsByName(centerName);
-	}
-	
 	@RequestMapping(value = "/api/centers/{id}", method = RequestMethod.DELETE)
 	public void deleteJobCenter(@PathVariable long id) {
 		jobCenterRepository.deleteById(id);
