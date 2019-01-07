@@ -11,8 +11,8 @@ public class JobCenterEntity {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long id;
 	private String username;
-
 	private String name;
+	
 	public JobCenterEntity(String name, String username) {
 		this.name = name;
 		this.username = username;

@@ -30,10 +30,10 @@ public class JobCenterController {
 	}
 	
 	
-	@RequestMapping(value = "/api/centers/{id}", method = RequestMethod.GET)
-	public ResponseEntity<JobCenterEntity> getJobCenter(@PathVariable long id) {
+	@RequestMapping(value = "/api/centers/{username}", method = RequestMethod.GET)
+	public ResponseEntity<JobCenterEntity> getJobCenter(@PathVariable String username) {
 		try {
-			JobCenterEntity jobCenterEntity = jobCenterRepository.findById(id).get();
+			JobCenterEntity jobCenterEntity = jobCenterRepository.findByUsername(username);
 			return ResponseEntity.ok().body(jobCenterEntity);
 		}
 		catch(NoSuchElementException e) {
