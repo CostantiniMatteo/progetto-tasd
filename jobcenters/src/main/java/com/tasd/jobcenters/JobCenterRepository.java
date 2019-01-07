@@ -7,4 +7,5 @@ public interface JobCenterRepository extends JpaRepository<JobCenterEntity, Long
 	JobCenterEntity findByName(String name);
 	boolean existsByName(String name);
 	JobCenterEntity findByUsername(String username);
+	void deleteByUsername(String username);
 }
