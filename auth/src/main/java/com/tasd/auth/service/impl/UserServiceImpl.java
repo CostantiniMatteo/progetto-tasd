@@ -22,20 +22,20 @@ import com.tasd.auth.model.UserDto;
 import com.tasd.auth.model.UserGeneral;
 import com.tasd.auth.proxy.CenterEntityProxy;
 import com.tasd.auth.proxy.JobCenterEntity;
-import com.tasd.auth.proxy.SeekerEntity;
+//import com.tasd.auth.proxy.SeekerEntity;
 import com.tasd.auth.proxy.SeekerEntityProxy;
 import com.tasd.auth.service.UserService;
 
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
-	
+
 	@Autowired
 	private CenterEntityProxy centerEntityProxy;
-	
-	@Autowired
-	private SeekerEntityProxy seekerEntityProxy;
-	
+
+//	@Autowired
+//	private SeekerEntityProxy seekerEntityProxy;
+
 	@Autowired
 	private UserRepo userDao;
 
@@ -100,17 +100,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
     }
-  
+
     public void dispatchUser(UserGeneral user) {
     	if(user.getRole().equals(User.Role.JOB_CENTER)) {
     		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername()));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
-    		seekerEntityProxy.createSeeker(new SeekerEntity());
+//    		seekerEntityProxy.createSeeker(new SeekerEntity());
     	}
     	else if(user.getRole().equals(User.Role.ADMIN)) {
-    		
+
     	}
     }
-    
+
 }

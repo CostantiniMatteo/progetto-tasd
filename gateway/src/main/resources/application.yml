@@ -1,4 +1,11 @@
 zuul:
+  eureka:
+    client:
+      registerWithEureka: false
+      fetchRegistri: true
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 20000
   routes:
     auth:
       path: /token/**
@@ -20,3 +27,4 @@ zuul:
     jobs:
       path: /api/centers/*/jobs
       stripPrefix: false
+
