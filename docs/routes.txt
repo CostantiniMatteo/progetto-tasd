@@ -1,22 +1,32 @@
-users/ GET, POST, PUT, DELETE
-users/{user_id}/ GET, PUT, DELETE
-users/{user_id}/skills/ GET, POST, PUT, DELETE
-users/{user_id}/suggestions/ GET
-users/{user_id}/applications/ GET, POST
-users/{user_id}/applications/{application_id}/ GET, PUT, DELETE
+SEEKER SERVICE
+api/seeker/ GET, POST, PUT, DELETE
+api/seeker/{user_id}/ GET, PUT, DELETE
+api/seeker/{user_id}/skills/ GET, POST
+api/seeker/{user_id}/skills/{skill_id}/ PUT, DELETE
 
-[Alternativa users/...]
-centers/ 
-GET: permette al seeker di vedere quali centri sono registrati
-POST: permette al job center di registrarsi
+JOB ADVISOR SERVICE
+api/seeker/{user_id}/suggestions/ GET
 
+APPLICATION SERVICE
+api/seeker/{user_id}/applications/ GET, POST
+api/seeker/{user_id}/applications/{application_id}/ GET, PUT, DELETE
 
-centers/{center_id}/ GET, PUT, DELETE
-centers/{center_id}/jobs/ GET, POST
-centers/{center_id}/jobs/{job_id}/ GET, PUT, DELETE
+JOB CENTER SERVICE
+api/centers/ GET, POST
+api/centers/{center_id}/ GET, PUT, DELETE
 
-# SEEKER SERVICE
-jobs/search?q={query} GET
+JOB SERVICE
+api/centers/{center_id}/jobs/ GET, POST
+api/centers/{center_id}/jobs/{job_id}/ GET, PUT, DELETE
 
-applications/ GET
-applications/{application_id}/ GET, PUT, DELETE
+SEARCH SERVICE
+api/jobs/search?q={query} GET
+
+AUTHENTICATION SERVICE
+signup/ POST
+token/generate-token/ POST
+
+MAILING SERVICE
+api/mail/publish POST
+api/mail/subscribe POST
+api/mail/unsubscribe DELETE
