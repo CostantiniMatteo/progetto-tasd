@@ -33,6 +33,7 @@ public class SeekerController {
 
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.GET)
 	public ResponseEntity<SeekerEntity> getJobCenter(@PathVariable String username) {
+		//TODO authorization control
 		SeekerEntity seekerEntity = seekerRepository.findByUsername(username);
 		if (seekerEntity != null) {
 			return ResponseEntity.ok().body(seekerEntity);
