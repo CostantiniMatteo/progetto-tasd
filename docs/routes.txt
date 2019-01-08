@@ -1,7 +1,8 @@
 SEEKER SERVICE
 api/seeker/ GET, POST, PUT, DELETE
 api/seeker/{user_id}/ GET, PUT, DELETE
-api/seeker/{user_id}/skills/ GET, POST, PUT, DELETE
+api/seeker/{user_id}/skills/ GET, POST
+api/seeker/{user_id}/skills/{skill_id}/ PUT, DELETE
 
 JOB ADVISOR SERVICE
 api/seeker/{user_id}/suggestions/ GET
