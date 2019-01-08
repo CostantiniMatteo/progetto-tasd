@@ -1,19 +1,34 @@
-package com.tasd.auth.model;
+package com.tasd.auth.proxy;
 
 import java.util.Date;
 
-import com.tasd.auth.model.User.Role;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-public class UserGeneral {
+@Entity
+public class SeekerEntity {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String username;
-	private String password;
-    private Role role;
-    private String centerName;
-    private String firstName;
+	private String firstName;
 	private String lastName;
-	private Date birth;
 	private String city;
+	private Date birth;
+	
+	public SeekerEntity() {
+	}
+	
+	public SeekerEntity(String username, String firstName, String lastName, String city, Date birth) {
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.city = city;
+		this.birth = birth;
+	}
 	
 	public long getId() {
 		return id;
@@ -27,24 +42,6 @@ public class UserGeneral {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public Role getRole() {
-		return role;
-	}
-	public void setRole(Role role) {
-		this.role = role;
-	}
-	public String getCenterName() {
-		return centerName;
-	}
-	public void setCenterName(String centerName) {
-		this.centerName = centerName;
-	}
 	public String getFirstName() {
 		return firstName;
 	}
@@ -57,16 +54,18 @@ public class UserGeneral {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public Date getBirth() {
-		return birth;
-	}
-	public void setBirth(Date birth) {
-		this.birth = birth;
-	}
 	public String getCity() {
 		return city;
 	}
 	public void setCity(String city) {
 		this.city = city;
 	}
+	public Date getBirth() {
+		return birth;
+	}
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+	
+	
 }

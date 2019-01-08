@@ -20,6 +20,9 @@ zuul:
     jobs:
       path: /api/centers/*/jobs
       stripPrefix: false
+    seekers:
+      path: /api/seekers/**
+      stripPrefix: false
   host:
     connect-timeout-millis: 10000
     socket-timeout-millis: 20000
