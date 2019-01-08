@@ -1,4 +1,4 @@
-package com.tasd.seekers;
+package com.tasd.seekers.entities;
 
 import java.util.Date;
 

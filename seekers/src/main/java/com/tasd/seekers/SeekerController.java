@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tasd.seekers.entities.SeekerEntity;
+import com.tasd.seekers.repo.SeekerRepository;
+
 @RestController
 public class SeekerController {
 
