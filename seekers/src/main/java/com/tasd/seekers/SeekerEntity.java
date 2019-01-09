@@ -1,11 +1,14 @@
-package com.tasd.seekers.entities;
+package com.tasd.seekers;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class SeekerEntity {
@@ -19,6 +22,15 @@ public class SeekerEntity {
 	private String city;
 	private Date birth;
 	
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<SkillEntity> skills;
+	
+	@Override
+	public String toString() {
+		return "SeekerEntity [id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName="
+				+ lastName + ", city=" + city + ", birth=" + birth + ", skills=" + skills.toString() + "]";
+	}
+
 	public SeekerEntity() {
 	}
 	
@@ -66,6 +78,15 @@ public class SeekerEntity {
 	public void setBirth(Date birth) {
 		this.birth = birth;
 	}
+
+	public List<SkillEntity> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<SkillEntity> skills) {
+		this.skills = skills;
+	}
+	
 	
 	
 }

@@ -1,4 +1,4 @@
-package com.tasd.skills.entities;
+package com.tasd.seekers;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +9,10 @@ import javax.persistence.Table;
 @Entity
 public class SkillEntity {
 
+	@Override
+	public String toString() {
+		return "SkillEntity [id=" + id + ", skill=" + skill + ", username=" + username + "]";
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;

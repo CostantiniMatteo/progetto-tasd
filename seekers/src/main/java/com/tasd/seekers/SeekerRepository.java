@@ -1,8 +1,6 @@
-package com.tasd.seekers.repo;
+package com.tasd.seekers;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.tasd.seekers.entities.SeekerEntity;
 
 public interface SeekerRepository extends JpaRepository<SeekerEntity, Long> {
 
