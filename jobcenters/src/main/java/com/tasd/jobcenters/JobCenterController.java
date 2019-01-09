@@ -3,10 +3,6 @@ package com.tasd.jobcenters;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

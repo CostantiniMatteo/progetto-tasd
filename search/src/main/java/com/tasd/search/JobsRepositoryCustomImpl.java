@@ -1,11 +1,9 @@
 package com.tasd.search;
 
-import org.hibernate.query.criteria.internal.OrderImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
