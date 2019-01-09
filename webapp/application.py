@@ -12,10 +12,8 @@ BASE_URL = "http://192.168.99.100:8080"
 
 @app.route('/dashboard', methods = ['GET'])
 def dashboard():
-    token = request.cookies.get('bearer')
-    j = jwt.decode(token, b64decode("JwtSecretKey"), algorithms=['HS256'])
-    print(j['sub'])
-    return render_template('home.html', user="")
+    j = validate(request)
+    return render_template('dashboard.html', username=j['sub'])
 
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -40,7 +38,7 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/signup_jobcenter', methods = ['GET', 'POST'])
+@app.route('/signup/jobcenter', methods = ['GET', 'POST'])
 def signup_jobcenter():
 
     if request.method == 'POST':
@@ -51,8 +49,29 @@ def signup_jobcenter():
 
     return render_template('signup_jobcenter.html')
 
+@app.route('/signup/seeker', methods = ['GET', 'POST'])
+def signup_seeker():
+
+    if request.method == 'POST':
+        r_json = request.form.to_dict(flat=True)
+        r_json["role"] = "SEEKER"
+        r_json["skills"] = request.form.getlist("skill")
+        print(r_json)
+        #print(requests.post(BASE_URL + "/signup", json=r_json))
+
+    return render_template('signup_seeker.html')
 
 
+
+def validate(request):
+
+    try:
+        token = request.cookies.get('bearer')
+        j = jwt.decode(token, b64decode("JwtSecretKey"), algorithms=['HS256'])
+    except:
+        j={}
+
+    return j
 
 
 if __name__ == '__main__':
