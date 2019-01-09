@@ -1,15 +1,15 @@
 SEEKER SERVICE
-api/seeker/ GET, POST, PUT, DELETE
-api/seeker/{user_id}/ GET, PUT, DELETE
-api/seeker/{user_id}/skills/ GET, POST
-api/seeker/{user_id}/skills/{skill_id}/ PUT, DELETE
+api/seekers/ GET, POST, PUT, DELETE
+api/seekers/{user_id}/ GET, PUT, DELETE
+api/seekers/{user_id}/skills/ GET, POST
+api/seekers/{user_id}/skills/{skill_id}/ PUT, DELETE
 
 JOB ADVISOR SERVICE
-api/seeker/{user_id}/suggestions/ GET
+api/seekers/{user_id}/suggestions/ GET
 
 APPLICATION SERVICE
-api/seeker/{user_id}/applications/ GET, POST
-api/seeker/{user_id}/applications/{application_id}/ GET, PUT, DELETE
+api/seekers/{user_id}/applications/ GET, POST
+api/seekers/{user_id}/applications/{application_id}/ GET, PUT, DELETE
 
 JOB CENTER SERVICE
 api/centers/ GET, POST
