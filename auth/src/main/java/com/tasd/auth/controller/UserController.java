@@ -2,15 +2,12 @@ package com.tasd.auth.controller;
 
 import com.tasd.auth.model.ApiResponse;
 import com.tasd.auth.model.User;
-import com.tasd.auth.model.User.Role;
-import com.tasd.auth.model.UserCenter;
 import com.tasd.auth.model.UserDto;
 import com.tasd.auth.model.UserGeneral;
 import com.tasd.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +15,10 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 
+
+
+// TODO: UserDto vs UserGeneral
+// TODO: Testare
 public class UserController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class UserController {
     public ApiResponse<List<User>> listUser(){
         return new ApiResponse<>(HttpStatus.OK.value(), "User list fetched successfully.",userService.findAll());
     }
-   
+
     @GetMapping("/users/{id}")
     public ApiResponse<User> getOne(@PathVariable int id){
         return new ApiResponse<>(HttpStatus.OK.value(), "User fetched successfully.",userService.findById(id));
@@ -48,6 +49,6 @@ public class UserController {
     public ResponseEntity<User> saveNewUser(@RequestBody UserGeneral user){
         return userService.save(user);
     }
-    
+
 
 }

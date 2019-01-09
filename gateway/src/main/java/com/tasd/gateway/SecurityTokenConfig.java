@@ -15,7 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityTokenConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private JwtConfig jwtConfig;
-	
+
+	// TODO: Alcune rotte devono essere accessibili anche se non autenticati
 	@Override
   	protected void configure(HttpSecurity http) throws Exception {
     	 http
@@ -39,7 +40,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter{
 				.addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class);*/
 
 	}
-	
+
 	@Bean
   	public JwtConfig jwtConfig() {
     	   return new JwtConfig();
