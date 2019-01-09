@@ -20,6 +20,9 @@ zuul:
     jobs:
       path: /api/centers/*/jobs/**
       stripPrefix: false
+    search:
+      path: /api/jobs/search
+      stripPrefix: false
     seekers:
       path: /api/seekers/**
       stripPrefix: false

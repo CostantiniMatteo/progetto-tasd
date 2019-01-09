@@ -16,28 +16,19 @@ public class SearchController {
 
     @RequestMapping(value = "/api/jobs/search", method = RequestMethod.GET)
     public ResponseEntity<List<JobEntity>> newJobs(@RequestParam("q") Optional<String> q,
-                                                   @RequestParam("sinceDate") Optional<Date> sinceDate,
-                                                   @RequestParam("toDate") Optional<Date> toDate,
                                                    @RequestParam("location") Optional<String> location) {
         String query = "";
-        Date sinceDateAaaaaaaaaa = null;
-        Date toDateAaaaaaaaaaa = null;
         String locationAaaaaaaaa = "";
+
         if (q.isPresent()) {
             query = q.get();
-        }
-        if (sinceDate.isPresent()) {
-            sinceDateAaaaaaaaaa = sinceDate.get();
-        }
-        if (toDate.isPresent()) {
-            toDateAaaaaaaaaaa = toDate.get();
         }
         if (location.isPresent()) {
             locationAaaaaaaaa = location.get();
         }
 
 
-        List<JobEntity> result = jobsRepository.findUserByQuery(query, sinceDateAaaaaaaaaa, toDateAaaaaaaaaaa, locationAaaaaaaaa);
+        List<JobEntity> result = jobsRepository.findUserByQuery(query, locationAaaaaaaaa);
         return ResponseEntity.ok(result);
     }
 
