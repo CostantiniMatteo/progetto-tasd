@@ -51,7 +51,6 @@ public class JwtTokenUtil implements Serializable {
         return doGenerateToken(user);
     }
 
-    //TODO: scoprire come funzionano i ruoli di spring
     private String doGenerateToken(User user) {
 
         Claims claims = Jwts.claims().setSubject(user.getUsername());

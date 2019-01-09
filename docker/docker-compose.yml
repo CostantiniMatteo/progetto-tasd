@@ -203,6 +203,41 @@ services:
           service_started
     restart: on-failure
 
+  applicationsdb:
+    image: postgres
+    container_name: applicationsdb
+    environment:
+      - POSTGRES_PASSWORD=1234
+    expose:
+      - 5432
+    ports:
+      - 5437:5432
+    networks:
+      - progetto-tasd
+    healthcheck:
+      test: "exit 0"
+
+  applications:
+    build:
+      context: ../applications
+      dockerfile: applications.Dockerfile
+    image: applications
+    container_name: applications
+    expose:
+      - 8600
+    ports:
+      - 8600:8600
+    networks:
+      - progetto-tasd
+    depends_on:
+      applicationsdb:
+        condition:
+          service_healthy
+      eurekaregistry:
+        condition:
+          service_started
+    restart: on-failure
+
   # adminer:
   #   image: adminer
   #   restart: always
@@ -213,4 +248,4 @@ services:
 
 networks:
   progetto-tasd:
-    driver: host
+    driver: bridge
