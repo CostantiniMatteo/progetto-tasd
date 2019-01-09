@@ -15,13 +15,12 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.tasd.seekers.skills.repo", 
+@EnableJpaRepositories(basePackages = "com.tasd.skills.repo", 
 						entityManagerFactoryRef = "skillEntityManager",
 						transactionManagerRef = "skillTransactionManager")
 public class SkillConfiguration {
 
 	@Bean
-	@Primary
 	@ConfigurationProperties(prefix = "skill.datasource")
 	public DataSource skillDataSource() {
 		return DataSourceBuilder.create().build();
@@ -30,7 +29,7 @@ public class SkillConfiguration {
 	@PersistenceContext(name = "skills")
 	@Bean(name = "skillEntityManager")
 	public LocalContainerEntityManagerFactoryBean skillEntityManagerFactory(EntityManagerFactoryBuilder builder) {
-		return builder.dataSource(skillDataSource()).packages("com.tasd.seekers.skills.entities")
+		return builder.dataSource(skillDataSource()).packages("com.tasd.skills.entities")
 				.persistenceUnit("skills").build();
 	}
 
