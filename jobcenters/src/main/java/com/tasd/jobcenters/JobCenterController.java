@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class JobCenterController {
 	}
 
 	@RequestMapping(value = "/api/centers", method = RequestMethod.POST)
-	public ResponseEntity<JobCenterEntity> createInstance(@RequestBody JobCenterEntity jobCenterEntity)
+	public ResponseEntity<JobCenterEntity> createJobCenter(@RequestBody JobCenterEntity jobCenterEntity)
 			throws URISyntaxException {
 		jobCenterRepository.save(jobCenterEntity);
 		return ResponseEntity.created(new URI("/api/centers" + jobCenterEntity.getId())).body(jobCenterEntity);
@@ -41,14 +42,20 @@ public class JobCenterController {
 	}
 
 	@RequestMapping(value = "/api/centers/{username}", method = RequestMethod.DELETE)
-	public void deleteJobCenter(@PathVariable String username) {
-		jobCenterRepository.deleteByUsername(username);
+	public ResponseEntity<JobCenterEntity> deleteJobCenter(@RequestHeader("X-User-Header") String loggedUser,
+														   @PathVariable String username) {
+		if (!username.equals(loggedUser)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		JobCenterEntity jobCenter = jobCenterRepository.findByUsername(username);
+		jobCenterRepository.delete(jobCenter);
+		return ResponseEntity.ok().build();
 	}
 
 	@RequestMapping(value = "/api/centers/{username}", method = RequestMethod.PUT)
-	public ResponseEntity<JobCenterEntity> newJobs(@RequestHeader("X-User-Header") String loggedUser,
-											 @PathVariable String username,
-											 @RequestBody JobCenterEntity jobCenter) {
+	public ResponseEntity<JobCenterEntity> updateJobCenter(@RequestHeader("X-User-Header") String loggedUser,
+														   @PathVariable String username,
+														   @RequestBody JobCenterEntity jobCenter) {
 		if (!username.equals(loggedUser)) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
