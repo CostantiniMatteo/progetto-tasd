@@ -21,7 +21,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class SkillConfiguration {
 
 	@Bean
-	@Primary
 	@ConfigurationProperties(prefix = "skill.datasource")
 	public DataSource skillDataSource() {
 		return DataSourceBuilder.create().build();

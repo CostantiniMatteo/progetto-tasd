@@ -28,6 +28,7 @@ public class SeekerConfiguration {
 	}
 	
 	@Bean(name = "entityManager")
+	@Primary
 	@PersistenceContext(name = "seekers")
 	public LocalContainerEntityManagerFactoryBean seekerEntityManagerFactory(
 	        EntityManagerFactoryBuilder builder) {
@@ -39,6 +40,7 @@ public class SeekerConfiguration {
 	}
 	
 	@Bean(name = "seekerTransactionManager")
+	@Primary
 	public PlatformTransactionManager transactionManager(EntityManagerFactoryBuilder builder) {
 		JpaTransactionManager tm = new JpaTransactionManager();
 		tm.setEntityManagerFactory(seekerEntityManagerFactory(builder).getObject());
