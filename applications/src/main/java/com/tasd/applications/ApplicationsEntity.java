@@ -16,7 +16,7 @@ public class ApplicationsEntity {
 	private String username;
 	private Date dateCreation;
 	private long jobId;
-
+	
 	public ApplicationsEntity(String username, Date dateCreation, long jobId) {
 		this.username = username;
 		this.dateCreation = dateCreation;

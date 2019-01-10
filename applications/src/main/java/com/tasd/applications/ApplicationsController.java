@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationsController {
 
 	@Autowired
-    ApplicationsRepository applicationsRepository;
+	private JobEntityProxy jobEntityProxy;
+	
+	@Autowired
+    private ApplicationsRepository applicationsRepository;
 
+	
 
     @RequestMapping(value = "/api/seekers/{username}/applications/", method = RequestMethod.GET)
     public ResponseEntity<List<ApplicationsEntity>> getApplications(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
@@ -32,15 +36,20 @@ public class ApplicationsController {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        JobEntityBean relatedJob = jobEntityProxy.getJob(application.getUsername(), application.getJobId());
+        if(relatedJob == null) {
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         application.setDateCreation(new Date());
         application.setUsername(username);
+        application.setJobId(application.getJobId());
         ApplicationsEntity a = applicationsRepository.save(application);
         return ResponseEntity.created(new URI("/api/seekers/" + username + "/applications/" + a.getId())).body(a);
     }
 
 
     @RequestMapping(value = "/api/seekers/{username}/applications/{applicationId}", method = RequestMethod.GET)
-    public ResponseEntity<ApplicationsEntity> getJob(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username, @PathVariable long applicationId) {
+    public ResponseEntity<ApplicationsEntity> getApplication(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username, @PathVariable long applicationId) {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -81,7 +90,7 @@ public class ApplicationsController {
     }
 
     @RequestMapping(value = "/api/seekers/{username}/applications/{applicationId}", method = RequestMethod.PUT)
-    public ResponseEntity<ApplicationsEntity> updateJob(@RequestHeader("X-User-Header") String loggedUser,
+    public ResponseEntity<ApplicationsEntity> updateApplication(@RequestHeader("X-User-Header") String loggedUser,
                                                @PathVariable String username,
                                                @PathVariable long applicationId,
                                                @RequestBody ApplicationsEntity application) {
@@ -91,6 +100,11 @@ public class ApplicationsController {
 
         if (application.getId() != applicationId || !username.equals(application.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        
+        JobEntityBean relatedJob = jobEntityProxy.getJob(application.getUsername(), application.getJobId());
+        if(relatedJob == null) {
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         applicationsRepository.save(application);
