@@ -91,6 +91,12 @@ public class SeekerEntity {
 		this.email = email;
 	}
 	
-	
+	public void removeSkill(String skill) {
+		skills.remove(skill);
+	}
+
+	public void addSkills(List<String> skills) {
+		skills.addAll(skills);
+	}
 	
 }

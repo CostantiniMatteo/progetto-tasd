@@ -19,4 +19,5 @@ public interface UserService {
     User findById(long id);
 
     UserDto update(UserDto userDto);
+	void deleteByUsername(String username);
 }

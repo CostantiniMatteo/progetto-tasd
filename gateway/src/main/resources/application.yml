@@ -27,6 +27,10 @@ zuul:
       path: /api/seekers/*
       stripPrefix: false
       serviceId: seekers
+    skills:
+      path: /api/seekers/*/skills/**
+      stripPrefix: false
+      serviceId: seekers
     applications:
       path: /api/seekers/*/applications/**
       stripPrefix: false

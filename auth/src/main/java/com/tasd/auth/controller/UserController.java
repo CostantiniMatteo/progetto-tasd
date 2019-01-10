@@ -39,10 +39,10 @@ public class UserController {
         return new ApiResponse<>(HttpStatus.OK.value(), "User updated successfully.",userService.update(userDto));
     }
 
-    @DeleteMapping("/users/{id}")
-    public ApiResponse<Void> delete(@PathVariable int id) {
-        userService.delete(id);
-        return new ApiResponse<>(HttpStatus.OK.value(), "User deleted successfully.", null);
+    @DeleteMapping("/users/{username}")
+    public ResponseEntity delete(@PathVariable String username) {
+        userService.deleteByUsername(username);
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(value="/signup", method = RequestMethod.POST)

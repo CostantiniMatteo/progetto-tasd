@@ -17,6 +17,7 @@ services:
       - 8761:8761
     networks:
       - progetto-tasd
+    mem_limit: 100M
 
   gateway:
     build:
@@ -35,6 +36,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 100M
 
   authdb:
     image: postgres
@@ -49,6 +51,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 100M
 
   auth:
     build:
@@ -76,6 +79,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 100M
 
   centersdb:
     image: postgres
@@ -90,6 +94,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 100M
 
   jobcenters:
     build:
@@ -111,6 +116,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 100M
 
   jobsdb:
     image: postgres
@@ -125,6 +131,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 100M
 
   jobs:
     build:
@@ -146,6 +153,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 100M
 
   search:
     build:
@@ -167,6 +175,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 100M
 
   seekersdb:
     image: postgres
@@ -181,6 +190,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 100M
 
   seekers:
     build:
@@ -202,6 +212,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 100M
 
   applicationsdb:
     image: postgres
@@ -216,6 +227,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 100M
 
   applications:
     build:
@@ -237,6 +249,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 100M
 
   # adminer:
   #   image: adminer
