@@ -3,7 +3,7 @@
 This project aims to build an application for search and apply job offers, built with a microservice architecture.
 
 # Architecture
-![alt](docs/Microservice%20progetto.png)
+![alt](docs/progetto-tasd-arch.png)
 
 The service API Gateway is the service responsible of dispatching web requests, authentication, authorization and filtering, and exposes application's API.  
 The service Job Center is the service responsible of managing job centers, and exposes CRUD API for jobs centers.  
