@@ -17,7 +17,7 @@ import java.util.List;
 
 
 
-// TODO: UserDto vs UserGeneral
+// TODO: modificare update e usare solo user
 // TODO: Testare
 public class UserController {
 

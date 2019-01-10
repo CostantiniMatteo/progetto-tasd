@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.tasd</groupId>
-	<artifactId>search</artifactId>
+	<artifactId>applications</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>search</name>
-	<description>The service responsible of browsing job insertions, and exposes API for job search.</description>
+	<name>applications</name>
+	<description>Is the service responsible of managing users&#39; applications to jobs, and exposes CRUD API for managing applications.</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -48,7 +48,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-    </dependencies>
+	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
