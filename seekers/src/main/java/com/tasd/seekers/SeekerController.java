@@ -36,7 +36,6 @@ public class SeekerController {
 
 	@RequestMapping(value = "/api/seekers", method = RequestMethod.POST)
 	public ResponseEntity<SeekerEntity> createInstance(@RequestBody SeekerEntity seekerEntity) throws URISyntaxException {
-		//System.out.println(seekerEntity.toString());
 		return ResponseEntity.created(new URI("/api/seekers" + seekerEntity.getId()))
 				.body(seekerRepository.save(seekerEntity));
 	}
@@ -55,7 +54,6 @@ public class SeekerController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
-	// TODO cancellare anche le skills a lui collegate
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.DELETE)
 	public ResponseEntity deleteJobSeeker(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username) {
@@ -71,7 +69,7 @@ public class SeekerController {
 	}
 
 	@RequestMapping(value = "/api/seekers/{username}/skills", method = RequestMethod.GET)
-	public ResponseEntity<List<SkillEntity>> getSkills(@RequestHeader("X-User-Header") String loggedUser,
+	public ResponseEntity<List<String>> getSkills(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username) throws URISyntaxException {
 		
 		if (!username.equals(loggedUser))
@@ -84,8 +82,8 @@ public class SeekerController {
 	}
 
 	@RequestMapping(value = "/api/seekers/{username}/skills", method = RequestMethod.PUT)
-	public ResponseEntity<List<SkillEntity>> postSkills(@RequestHeader("X-User-Header") String loggedUser,
-			@PathVariable String username, @RequestBody List<SkillEntity> skills) throws URISyntaxException {
+	public ResponseEntity<List<String>> postSkills(@RequestHeader("X-User-Header") String loggedUser,
+			@PathVariable String username, @RequestBody List<String> skills) throws URISyntaxException {
 		if (!username.equals(loggedUser))
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		
@@ -102,7 +100,7 @@ public class SeekerController {
 
 	// TODO controllare che la skill appartenga a quell'utente prima di cancellarla
 	@RequestMapping(value = "/api/seekers/{username}/skills/{skillId}", method = RequestMethod.DELETE)
-	public ResponseEntity<List<SkillEntity>> deletetSkill(@RequestHeader("X-User-Header") String loggedUser,
+	public ResponseEntity deletetSkill(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username, @PathVariable long skillId) throws URISyntaxException {
 		if (!username.equals(loggedUser)) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

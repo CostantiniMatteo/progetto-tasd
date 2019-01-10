@@ -106,7 +106,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername()));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
-    		SeekerEntity newSeeker = new SeekerEntity(user.getUsername(), user.getFirstName(), user.getLastName(), user.getCity(), user.getBirth());
+//    		String username, String firstName, String lastName, String email, String city, Date birth, List<SkillEntity> skills
+    		SeekerEntity newSeeker = new SeekerEntity(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCity(), user.getBirth(), user.getSkills());
     		seekerEntityProxy.createSeeker(newSeeker);
     	}
     	else if(user.getRole().equals(User.Role.ADMIN)) {
