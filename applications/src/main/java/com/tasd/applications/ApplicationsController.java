@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-//TODO fare chiamata esistenza job
+
+import feign.FeignException;
 @RestController
 public class ApplicationsController {
 
@@ -36,8 +37,10 @@ public class ApplicationsController {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        JobEntityBean relatedJob = jobEntityProxy.getJob(application.getUsername(), application.getJobId());
-        if(relatedJob == null) {
+        try {
+        	JobEntityBean relatedJob = jobEntityProxy.getJob(loggedUser, application.getUsername(), application.getJobId());
+        }
+        catch(FeignException e) {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         application.setDateCreation(new Date());
@@ -102,11 +105,14 @@ public class ApplicationsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         
-        JobEntityBean relatedJob = jobEntityProxy.getJob(application.getUsername(), application.getJobId());
-        if(relatedJob == null) {
+        try {
+        	JobEntityBean relatedJob = jobEntityProxy.getJob(loggedUser, application.getUsername(), application.getJobId());
+        }
+        catch(FeignException e) {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
+        Date dateCreation = applicationsRepository.findById(applicationId).get().getDateCreation();
+        application.setDateCreation(dateCreation);
         applicationsRepository.save(application);
         return ResponseEntity.ok(application);
     }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @Repository
 @FeignClient(name = "jobs")
@@ -13,6 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface JobEntityProxy {
 	
 	@RequestMapping(value = "/api/centers/{username}/jobs/{jobId}", method = RequestMethod.GET)
-	JobEntityBean getJob(@PathVariable String username, @PathVariable long jobId);
+	JobEntityBean getJob(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username, @PathVariable long jobId);
 
 }
