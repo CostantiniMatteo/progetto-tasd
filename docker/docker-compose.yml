@@ -101,7 +101,7 @@ services:
         condition:
           service_started
     restart: on-failure
-    mem_limit: 250M
+    mem_limit: 500M
 
   centersdb:
     image: postgres
