@@ -1,7 +1,11 @@
+<body class="with-sidebar">
+  <div class="mdl-layout__container">
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header mdl-layout--fixed-tabs">
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
-          {% block name_page %}{% endblock %}
+            <span class="mdl-layout-title">
+              {{name_page}}
+            </span>
           <div class="mdl-layout-spacer"></div>
         </div>
           {% block tabs %}{% endblock %}
@@ -16,9 +20,13 @@
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
           <a class="mdl-navigation__link" href="">
             <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>
-            Home
+            Dashboard
           </a>
 
+          <a class="mdl-navigation__link" href="">
+            <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">work</i>
+            All Jobs
+          </a>
 
           <a class="mdl-navigation__link" href="">
             <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">person</i>
