@@ -25,7 +25,7 @@ public class AdvisorController {
 														@PathVariable String username) {
 		if (!username.equals(loggedUser))
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		SeekerEntity user = seekerProxy.getSeeker(username);
+		SeekerEntity user = seekerProxy.getSeeker(loggedUser, username);
 		if (user == null)
 			return ResponseEntity.notFound().build();
 		
