@@ -24,9 +24,17 @@ zuul:
       path: /api/jobs/search
       stripPrefix: false
     seekers:
-      path: /api/seekers/**
+      path: /api/seekers/*
       stripPrefix: false
       serviceId: seekers
+    skills:
+      path: /api/seekers/*/skills/**
+      stripPrefix: false
+      serviceId: seekers
+    applications:
+      path: /api/seekers/*/applications/**
+      stripPrefix: false
+      serviceId: applications
   host:
     connect-timeout-millis: 10000
     socket-timeout-millis: 20000

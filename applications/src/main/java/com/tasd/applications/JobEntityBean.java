@@ -1,17 +1,9 @@
-package com.tasd.jobs;
+package com.tasd.applications;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class JobEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class JobEntityBean {
+	
 	private long id;
 	private String username;
 	private String position;
@@ -20,11 +12,7 @@ public class JobEntity {
 	private Date dateCreation;
 	private String companyName;
 
-	public JobEntity() {
-	
-	}
-	
-	public JobEntity(long id, String username, String position, String jobDescription, String location,
+	public JobEntityBean(long id, String username, String position, String jobDescription, String location,
 			Date dateCreation, String companyName) {
 		super();
 		this.id = id;
@@ -35,6 +23,11 @@ public class JobEntity {
 		this.dateCreation = dateCreation;
 		this.companyName = companyName;
 	}
+	
+	public JobEntityBean() {
+		
+	}	
+	
 	public long getId() {
 		return id;
 	}

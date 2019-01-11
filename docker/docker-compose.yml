@@ -17,6 +17,7 @@ services:
       - 8761:8761
     networks:
       - progetto-tasd
+    mem_limit: 500M
 
   gateway:
     build:
@@ -35,6 +36,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 500M
 
   authdb:
     image: postgres
@@ -49,6 +51,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 500M
 
   auth:
     build:
@@ -76,6 +79,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 500M
 
   centersdb:
     image: postgres
@@ -90,6 +94,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 500M
 
   jobcenters:
     build:
@@ -111,6 +116,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 500M
 
   jobsdb:
     image: postgres
@@ -125,6 +131,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 500M
 
   jobs:
     build:
@@ -146,6 +153,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 500M
 
   search:
     build:
@@ -167,6 +175,7 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 500M
 
   seekersdb:
     image: postgres
@@ -181,6 +190,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
+    mem_limit: 500M
 
   seekers:
     build:
@@ -202,6 +212,44 @@ services:
         condition:
           service_started
     restart: on-failure
+    mem_limit: 500M
+
+  applicationsdb:
+    image: postgres
+    container_name: applicationsdb
+    environment:
+      - POSTGRES_PASSWORD=1234
+    expose:
+      - 5432
+    ports:
+      - 5437:5432
+    networks:
+      - progetto-tasd
+    healthcheck:
+      test: "exit 0"
+    mem_limit: 500M
+
+  applications:
+    build:
+      context: ../applications
+      dockerfile: applications.Dockerfile
+    image: applications
+    container_name: applications
+    expose:
+      - 8600
+    ports:
+      - 8600:8600
+    networks:
+      - progetto-tasd
+    depends_on:
+      applicationsdb:
+        condition:
+          service_healthy
+      eurekaregistry:
+        condition:
+          service_started
+    restart: on-failure
+    mem_limit: 500M
 
   # adminer:
   #   image: adminer
@@ -213,4 +261,4 @@ services:
 
 networks:
   progetto-tasd:
-    driver: host
+    driver: bridge

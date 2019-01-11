@@ -37,13 +37,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	private SeekerEntityProxy seekerEntityProxy;
 
 	@Autowired
-	private UserRepo userDao;
+	private UserRepo userRepo;
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userDao.findByUsername(username);
+		User user = userRepo.findByUsername(username);
 		if(user == null){
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
@@ -56,23 +56,23 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();
-		userDao.findAll().iterator().forEachRemaining(list::add);
+		userRepo.findAll().iterator().forEachRemaining(list::add);
 		return list;
 	}
 
 	@Override
 	public void delete(long id) {
-		userDao.deleteById(id);
+		userRepo.deleteById(id);
 	}
 
 	@Override
 	public User findOne(String username) {
-		return userDao.findByUsername(username);
+		return userRepo.findByUsername(username);
 	}
 
 	@Override
 	public User findById(long id) {
-		Optional<User> optionalUser = userDao.findById(id);
+		Optional<User> optionalUser = userRepo.findById(id);
 		return optionalUser.isPresent() ? optionalUser.get() : null;
 	}
 
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User user = findById(userDto.getId());
         if(user != null) {
             BeanUtils.copyProperties(userDto, user, "password");
-            userDao.save(user);
+            userRepo.save(user);
         }
         return userDto;
     }
@@ -92,8 +92,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	    newUser.setUsername(user.getUsername());
 	    newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 		newUser.setRole(user.getRole());
-		if (!userDao.existsByUsername(user.getUsername())) {
-			User newUserSave = userDao.save(newUser);
+		if (!userRepo.existsByUsername(user.getUsername())) {
+			User newUserSave = userRepo.save(newUser);
 			dispatchUser(user);
 			return ResponseEntity.ok().body(newUserSave);
 		} else {
@@ -106,12 +106,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername()));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
-    		SeekerEntity newSeeker = new SeekerEntity(user.getUsername(), user.getFirstName(), user.getLastName(), user.getCity(), user.getBirth());
+    		SeekerEntity newSeeker = new SeekerEntity(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCity(), user.getBirth(), user.getSkills());
     		seekerEntityProxy.createSeeker(newSeeker);
     	}
     	else if(user.getRole().equals(User.Role.ADMIN)) {
 
     	}
     }
+
+	@Override
+	public void deleteByUsername(String username) {
+		userRepo.deleteByUsername(username);
+		
+	}
 
 }

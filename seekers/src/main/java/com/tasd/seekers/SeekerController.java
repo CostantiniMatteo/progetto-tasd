@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 
- * api/seekers/ GET, POST api/seekers/{username}/ GET, PUT, DELETE
- * api/seekers/{username}/skills/ GET, POST
+ * api/seekers/ GET, POST 
+ * api/seekers/{username}/ GET, DELETE
+ * api/seekers/{username}/skills/ GET, POST, PUT
  * api/seekers/{username}/skills/{skillId}/ DELETE
  * 
  * @author thekeymaker
@@ -29,87 +30,153 @@ public class SeekerController {
 	@Autowired
 	private SeekerRepository seekerRepository;
 
+	@Autowired
+	private AuthUserProxy authProxy;
+	
+	/**
+	 * This method return the list of all the seekers.
+	 * Should be called only by ADMINS.
+	 * 
+	 * @return the list of all the seekers.
+	 */
 	@RequestMapping(value = "/api/seekers", method = RequestMethod.GET)
 	public ResponseEntity<List<SeekerEntity>> getAllSeekers() {
 		return ResponseEntity.ok().body(seekerRepository.findAll());
 	}
 
+	/**
+	 * This method create a new user as a SEEKER. 
+	 * It should be called only by AUTH SERVICE.
+	 * 
+	 * @return the object created
+	 * @throws URISyntaxException
+	 */
 	@RequestMapping(value = "/api/seekers", method = RequestMethod.POST)
 	public ResponseEntity<SeekerEntity> createInstance(@RequestBody SeekerEntity seekerEntity) throws URISyntaxException {
-		//System.out.println(seekerEntity.toString());
 		return ResponseEntity.created(new URI("/api/seekers" + seekerEntity.getId()))
 				.body(seekerRepository.save(seekerEntity));
 	}
 
+	/**
+	 * This method is used to get personal information of the registered seeker
+	 * 
+	 * @param loggedUser
+	 * @param username
+	 * @return 401 if user is not logged, 404 if user doesn't exist, 200 and seeker's data otherwise
+	 */
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.GET)
 	public ResponseEntity<SeekerEntity> getJobSeeker(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username) {
-		if (!username.equals(loggedUser)) {
+		if (!username.equals(loggedUser))
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		} else {
-			SeekerEntity seekerEntity = seekerRepository.findByUsername(username);
-			if (seekerEntity != null) {
-				return ResponseEntity.ok().body(seekerEntity);
-			}
-		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		
+		SeekerEntity seekerEntity = seekerRepository.findByUsername(username);
+		if (seekerEntity == null) 
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		
+		return ResponseEntity.ok().body(seekerEntity);
 	}
 
-	// TODO cancellare anche le skills a lui collegate
+	/**
+	 * This method is used to delete personal information of the registered seeker.
+	 * 
+	 * @param loggedUser
+	 * @param username
+	 * @return 401 if user is not logged, 404 if user doesn't exist, 200 otherwise
+	 */
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.DELETE)
 	public ResponseEntity deleteJobSeeker(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username) {
 		if (!username.equals(loggedUser)) 
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		
-		if (seekerRepository.existsByUsername(username)) {
-			seekerRepository.delete(seekerRepository.findByUsername(username));
-			return ResponseEntity.ok().build();
-		}
-		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
+		SeekerEntity seeker = seekerRepository.findByUsername(username);
+		if (seeker == null) 
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
+		seekerRepository.delete(seeker);
+		authProxy.deleteAuthUser(username);
+		return ResponseEntity.ok().build();
+
+	}
+	
+	/**
+	 * 
+	 * This method is used to get the skills of the registered seeker.
+	 * 
+	 * @param loggedUser
+	 * @param username
+	 * @return 401 if user is not logged, 404 if user doesn't exist, 200 and the list of skills otherwise
+	 * 
+	 * @throws URISyntaxException
+	 */
 	@RequestMapping(value = "/api/seekers/{username}/skills", method = RequestMethod.GET)
-	public ResponseEntity<List<SkillEntity>> getSkills(@RequestHeader("X-User-Header") String loggedUser,
+	public ResponseEntity<List<String>> getSkills(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username) throws URISyntaxException {
 		
 		if (!username.equals(loggedUser))
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		
-		if (seekerRepository.findByUsername(username) == null) 
+		SeekerEntity seeker = seekerRepository.findByUsername(username);
+		if (seeker == null) 
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		
-		return ResponseEntity.ok(seekerRepository.findByUsername(username).getSkills());
+
+		return ResponseEntity.ok(seeker.getSkills());
 	}
 
+	/**
+	 * 
+	 * This method is used to add skills to the registered user.
+	 * 
+	 * @param loggedUser
+	 * @param username
+	 * @param skills
+	 * @return 401 if user is not logged, 404 if user doesn't exist, 200 and the updated list of
+	 * skills otherwise
+	 * 
+	 * @throws URISyntaxException
+	 */
 	@RequestMapping(value = "/api/seekers/{username}/skills", method = RequestMethod.PUT)
-	public ResponseEntity<List<SkillEntity>> postSkills(@RequestHeader("X-User-Header") String loggedUser,
-			@PathVariable String username, @RequestBody List<SkillEntity> skills) throws URISyntaxException {
+	public ResponseEntity<List<String>> addSkills(@RequestHeader("X-User-Header") String loggedUser,
+			@PathVariable String username, @RequestBody List<String> newSkills) throws URISyntaxException {
 		if (!username.equals(loggedUser))
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		
-		if (seekerRepository.findByUsername(username) == null) 
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-			
 		SeekerEntity seeker = seekerRepository.findByUsername(username);
-		seeker.setSkills(skills);
-		seekerRepository.save(seeker);
-		return ResponseEntity.created(new URI("api/seekers/" + username + "skills"))
-					.body(seekerRepository.findByUsername(username).getSkills());
-		
+		if (seeker == null) 
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+		List<String> oldSkills = seeker.getSkills();
+		oldSkills.addAll(newSkills);
+		seeker.setSkills(oldSkills);
+		seeker = seekerRepository.save(seeker);
+		return ResponseEntity.ok(seeker.getSkills());
+
 	}
 
-	// TODO controllare che la skill appartenga a quell'utente prima di cancellarla
-	@RequestMapping(value = "/api/seekers/{username}/skills/{skillId}", method = RequestMethod.DELETE)
-	public ResponseEntity<List<SkillEntity>> deletetSkill(@RequestHeader("X-User-Header") String loggedUser,
-			@PathVariable String username, @PathVariable long skillId) throws URISyntaxException {
-		if (!username.equals(loggedUser)) {
+	/**
+	 * 
+	 * This method is used to delete a skill of a registered user.
+	 * 
+	 * @param loggedUser
+	 * @param username
+	 * @param skill
+	 * @return 401 if user is not logged, 404 if user doesn't exist, 200 otherwise
+	 * @throws URISyntaxException
+	 */
+	@RequestMapping(value = "/api/seekers/{username}/skills/{skill}", method = RequestMethod.DELETE)
+	public ResponseEntity deleteSkill(@RequestHeader("X-User-Header") String loggedUser,
+			@PathVariable String username, @PathVariable String skill) throws URISyntaxException {
+		if (!username.equals(loggedUser))
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		} else {
-			//TODO eliminare una skill dalla lista skillRepository.deleteById(skillId);
-			return ResponseEntity.ok().build();
-		}
+		
+		SeekerEntity seeker = seekerRepository.findByUsername(username);
+		if (seeker == null) 
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		
+		seeker.removeSkill(skill);
+		seekerRepository.save(seeker);
+		return ResponseEntity.ok().build();
 	}
 
 }
