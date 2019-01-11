@@ -657,7 +657,7 @@ nav{
 #error-child{
   width: 300px;
   position: absolute;
-  top: 50%;left: 50%; 
+  top: 50%;left: 50%;
   transform: translate(-50%, -50%);
 }
 
@@ -672,4 +672,8 @@ input.delete-att:hover{
 
 input[type="text"]#id_descr_ris_new::placeholder{
   color: #3c3c3c !important;
+}
+
+.index-div {
+  height: 100%;
 }
