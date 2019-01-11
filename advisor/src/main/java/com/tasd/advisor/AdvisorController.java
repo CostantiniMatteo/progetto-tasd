@@ -21,11 +21,11 @@ public class AdvisorController {
 	private SeekerProxy seekerProxy;
 	
 	@RequestMapping(value = "api/seekers/{username}/suggestions", method = RequestMethod.GET)
-	public ResponseEntity<List<JobEntity>> getAllSeekers(@RequestHeader("X-User-Header") String loggedUser, 
+	public ResponseEntity<List<JobEntity>> getAllJobs(@RequestHeader("X-User-Header") String loggedUser, 
 														@PathVariable String username) {
 		if (!username.equals(loggedUser))
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		SeekerEntity user = seekerProxy.getSeeker(username);
+		SeekerEntity user = seekerProxy.getSeeker(loggedUser, username);
 		if (user == null)
 			return ResponseEntity.notFound().build();
 		
