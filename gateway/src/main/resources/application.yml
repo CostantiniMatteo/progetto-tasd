@@ -32,7 +32,7 @@ zuul:
       stripPrefix: false
       serviceId: seekers
     seekers:
-      path: /api/seekers/
+      path: /api/seekers
       stripPrefix: false
       serviceId: seekers
     skills:
