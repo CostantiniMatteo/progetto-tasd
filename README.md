@@ -27,11 +27,6 @@ git clone https://github.com/AndreJackBia/progetto-tasd.git
 cd progetto-tasd/docker
 docker-compose up
 ```
-Then 
-
-```
-until finished
-```
 
 ## Built With
 
