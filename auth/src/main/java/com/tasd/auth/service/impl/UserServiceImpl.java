@@ -61,8 +61,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	@Override
-	public void delete(long id) {
-		userRepo.deleteById(id);
+	public void delete(String username) {
+		User user = userRepo.findByUsername(username);
+		userRepo.delete(user);
+		if ("SEEKER".equals(user.getRole().toString()))
+			seekerEntityProxy.deleteSeeker(username, user.getUsername());
+		else if ("JOB_CENTER".equals(user.getRole().toString()))
+			centerEntityProxy.deleteCenter(username, user.getUsername());
 	}
 
 	@Override
@@ -103,7 +108,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     public void dispatchUser(UserGeneral user) {
     	if(user.getRole().equals(User.Role.JOB_CENTER)) {
-    		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername()));
+    		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername(), user.getEmail()));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
     		SeekerEntity newSeeker = new SeekerEntity(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCity(), user.getBirth(), user.getSkills());
@@ -113,11 +118,5 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     	}
     }
-
-	@Override
-	public void deleteByUsername(String username) {
-		userRepo.deleteByUsername(username);
-		
-	}
 
 }

@@ -12,12 +12,8 @@ public interface UserService {
 
     ResponseEntity<User> save(UserGeneral user);
     List<User> findAll();
-    void delete(long id);
-
+    void delete(String username);
     User findOne(String username);
-
     User findById(long id);
-
     UserDto update(UserDto userDto);
-	void deleteByUsername(String username);
 }

@@ -13,10 +13,12 @@ public class JobCenterEntity {
 	private long id;
 	private String username;
 	private String name;
+	private String email;
 
-	public JobCenterEntity(String name, String username) {
+	public JobCenterEntity(String name, String username, String email) {
 		this.name = name;
 		this.username = username;
+		this.email = email;
 	}
 
 	public JobCenterEntity() {
@@ -49,4 +51,14 @@ public class JobCenterEntity {
 	public void setId(long id) {
 		this.id = id;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
 }

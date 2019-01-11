@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 
  * api/seekers/ GET, POST 
- * api/seekers/{username}/ GET, DELETE
+ * api/seekers/{username}/ GET, DELETE, PUT
  * api/seekers/{username}/skills/ GET, POST, PUT
  * api/seekers/{username}/skills/{skillId}/ DELETE
  * 
@@ -29,9 +29,6 @@ public class SeekerController {
 
 	@Autowired
 	private SeekerRepository seekerRepository;
-
-	@Autowired
-	private AuthUserProxy authProxy;
 	
 	/**
 	 * This method return the list of all the seekers.
@@ -76,6 +73,8 @@ public class SeekerController {
 		
 		return ResponseEntity.ok().body(seekerEntity);
 	}
+	
+	//TODO fare la PUT
 
 	/**
 	 * This method is used to delete personal information of the registered seeker.
@@ -95,7 +94,6 @@ public class SeekerController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
 		seekerRepository.delete(seeker);
-		authProxy.deleteAuthUser(username);
 		return ResponseEntity.ok().build();
 
 	}
@@ -153,7 +151,7 @@ public class SeekerController {
 		return ResponseEntity.ok(seeker.getSkills());
 
 	}
-
+	
 	/**
 	 * 
 	 * This method is used to delete a skill of a registered user.
