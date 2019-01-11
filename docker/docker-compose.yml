@@ -17,7 +17,7 @@ services:
       - 8761:8761
     networks:
       - progetto-tasd
-    mem_limit: 500M
+    mem_limit: 250M
 
   gateway:
     build:
@@ -38,6 +38,28 @@ services:
     restart: on-failure
     mem_limit: 500M
 
+  advisor:
+    build:
+      context: ../advisor
+      dockerfile: advisor.Dockerfile
+    image: advisor
+    container_name: advisor
+    expose:
+      - 8700
+    ports:
+      - 8700:8700
+    networks:
+      - progetto-tasd
+    depends_on:
+      eurekaregistry:
+        condition:
+          service_started
+      jobsdb:
+        condition:
+          service_healthy
+    restart: on-failure
+    mem_limit: 250M
+
   authdb:
     image: postgres
     container_name: authdb
@@ -51,7 +73,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 500M
+    mem_limit: 250M
 
   auth:
     build:
@@ -79,7 +101,7 @@ services:
         condition:
           service_started
     restart: on-failure
-    mem_limit: 500M
+    mem_limit: 250M
 
   centersdb:
     image: postgres
@@ -94,7 +116,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 500M
+    mem_limit: 250M
 
   jobcenters:
     build:
@@ -116,7 +138,7 @@ services:
         condition:
           service_started
     restart: on-failure
-    mem_limit: 500M
+    mem_limit: 250M
 
   jobsdb:
     image: postgres
@@ -131,7 +153,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 500M
+    mem_limit: 250M
 
   jobs:
     build:
@@ -153,7 +175,7 @@ services:
         condition:
           service_started
     restart: on-failure
-    mem_limit: 500M
+    mem_limit: 250M
 
   search:
     build:
@@ -175,7 +197,7 @@ services:
         condition:
           service_started
     restart: on-failure
-    mem_limit: 500M
+    mem_limit: 250M
 
   seekersdb:
     image: postgres
@@ -190,7 +212,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 500M
+    mem_limit: 250M
 
   seekers:
     build:
@@ -212,7 +234,7 @@ services:
         condition:
           service_started
     restart: on-failure
-    mem_limit: 500M
+    mem_limit: 250M
 
   applicationsdb:
     image: postgres
@@ -227,7 +249,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 500M
+    mem_limit: 250M
 
   applications:
     build:
@@ -249,7 +271,7 @@ services:
         condition:
           service_started
     restart: on-failure
-    mem_limit: 500M
+    mem_limit: 250M
 
   # adminer:
   #   image: adminer

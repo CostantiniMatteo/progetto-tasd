@@ -19,12 +19,11 @@ public class JobsController {
 
 
     @RequestMapping(value = "/api/centers/{username}/jobs/", method = RequestMethod.GET)
-    public ResponseEntity<List<JobEntity>> getJobs(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
-        if (!username.equals(loggedUser)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        return ResponseEntity.ok().body(jobRepository.findAllByUsername(username));
+    public ResponseEntity<List<JobEntity>> getJobs(@PathVariable String username) {
+    	List<JobEntity> jobs = jobRepository.findAllByUsername(username);
+    	if (jobs == null)
+    		return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(jobs);
     }
 
     @RequestMapping(value = "/api/centers/{username}/jobs", method = RequestMethod.POST)
