@@ -10,8 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Entity
 public class SeekerEntity {
-
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String username;
 	private String email;
@@ -19,6 +22,7 @@ public class SeekerEntity {
 	private String lastName;
 	private String city;
 	private Date birth;
+	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> skills;
 
 	public SeekerEntity() {
