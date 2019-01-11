@@ -35,6 +35,9 @@ services:
       eurekaregistry:
         condition:
           service_started
+      auth:
+        condition:
+          service_started
     restart: on-failure
     mem_limit: 500M
 
