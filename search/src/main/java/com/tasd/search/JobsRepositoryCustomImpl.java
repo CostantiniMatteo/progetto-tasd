@@ -11,7 +11,7 @@ public class JobsRepositoryCustomImpl implements JobsRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<JobEntity> findUserByQuery(String q, String location) {
+    public List<JobEntity> findJobByQuery(String q, String location) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<JobEntity> query = cb.createQuery(JobEntity.class);
         Root<JobEntity> jobEntity = query.from(JobEntity.class);
