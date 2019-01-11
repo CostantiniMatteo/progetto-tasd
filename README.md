@@ -16,39 +16,30 @@ The service Seeker is the service responsible of managing users, and exposes CRU
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+To run the whole application, a docker machine with at least 6500 MB of RAM is needed.
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+To run the application, first clone git repository and `cd` into the docker folder inside the project and finally run `docker-compose`:
 
 ```
-Give the example
+git clone https://github.com/AndreJackBia/progetto-tasd.git
+cd progetto-tasd/docker
+docker-compose up
 ```
-
-And repeat
+Then 
 
 ```
 until finished
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Spring Boot](https://spring.io/projects/spring-boot)
+* [Maven](https://maven.apache.org/)
+* [Docker](https://www.docker.com/) 
+* [Flask](https://flask.pocoo.org/)
+* [Postgres](https://www.postgresql.org/)
 
 ## Authors
 
