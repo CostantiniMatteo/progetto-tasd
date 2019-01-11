@@ -12,5 +12,5 @@ RUN mvn install -DskipTests
 
 FROM openjdk:8-jre-alpine
 COPY --from=build /usr/src/app/target/applications-0.0.1-SNAPSHOT.jar /app/app.jar
-EXPOSE 8400
+EXPOSE 8600
 ENTRYPOINT ["/usr/bin/java", "-jar", "/app/app.jar"]
