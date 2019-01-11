@@ -144,9 +144,7 @@ public class SeekerController {
 		if (seeker == null) 
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-		List<String> oldSkills = seeker.getSkills();
-		oldSkills.addAll(newSkills);
-		seeker.setSkills(oldSkills);
+		seeker.setSkills(newSkills);
 		seeker = seekerRepository.save(seeker);
 		return ResponseEntity.ok(seeker.getSkills());
 

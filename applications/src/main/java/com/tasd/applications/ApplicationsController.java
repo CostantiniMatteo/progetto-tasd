@@ -21,8 +21,6 @@ public class ApplicationsController {
 	@Autowired
     private ApplicationsRepository applicationsRepository;
 
-	
-
     @RequestMapping(value = "/api/seekers/{username}/applications/", method = RequestMethod.GET)
     public ResponseEntity<List<ApplicationsEntity>> getApplications(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
         if (!username.equals(loggedUser)) {
