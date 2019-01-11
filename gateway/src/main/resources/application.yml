@@ -43,6 +43,10 @@ zuul:
       path: /api/seekers/*/applications/**
       stripPrefix: false
       serviceId: applications
+    notification:
+      path: /api/send-notification
+      stripPrefix: false
+      serviceId: notification
   host:
     connect-timeout-millis: 10000
     socket-timeout-millis: 20000

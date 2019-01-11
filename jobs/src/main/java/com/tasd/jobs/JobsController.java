@@ -51,8 +51,8 @@ public class JobsController {
         }
 
         JobEntity job = jobOpt.get();
-        if (username.equals(job.getUsername())) {
-            return ResponseEntity.ok(job);
+        if(job != null) {
+        	return ResponseEntity.ok(job);
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

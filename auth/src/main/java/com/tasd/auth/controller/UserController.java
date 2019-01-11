@@ -50,5 +50,13 @@ public class UserController {
         return userService.save(user);
     }
 
+    @RequestMapping(value="/recover-email/{username}", method = RequestMethod.GET)
+    public String recoverEmail(@PathVariable String username) {
+    	User user = userService.findByUsername(username);
+    	if(user != null) {
+    		return user.getEmail();
+    	}
+    	return null;
+    }
 
 }

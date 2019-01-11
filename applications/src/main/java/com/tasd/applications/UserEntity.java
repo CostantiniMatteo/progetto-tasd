@@ -1,30 +1,15 @@
-package com.tasd.auth.model;
+package com.tasd.applications;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+public class UserEntity {
 
-@Entity
-@Table(name = "user_entity")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
-
-    @Column
     private String email;
     
-
-	@Column
     private String username;
 
-    @Column
-    @JsonIgnore
     private String password;
 
-    @Column
-    @Enumerated(EnumType.STRING)
     private Role role;
 
     public enum Role {

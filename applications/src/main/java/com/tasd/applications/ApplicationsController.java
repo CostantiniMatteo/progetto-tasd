@@ -21,6 +21,12 @@ public class ApplicationsController {
 	@Autowired
     private ApplicationsRepository applicationsRepository;
 
+	@Autowired
+	private UserEntityProxy userEntityProxy;
+	
+	@Autowired
+	private NotificationEntityProxy notificationEntityProxy;
+	
     @RequestMapping(value = "/api/seekers/{username}/applications/", method = RequestMethod.GET)
     public ResponseEntity<List<ApplicationsEntity>> getApplications(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
         if (!username.equals(loggedUser)) {
@@ -35,8 +41,9 @@ public class ApplicationsController {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        JobEntityBean relatedJob;
         try {
-        	JobEntityBean relatedJob = jobEntityProxy.getJob(loggedUser, application.getUsername(), application.getJobId());
+        	relatedJob = jobEntityProxy.getJob(loggedUser, application.getUsername(), application.getJobId());
         }
         catch(FeignException e) {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -45,6 +52,8 @@ public class ApplicationsController {
         application.setUsername(username);
         application.setJobId(application.getJobId());
         ApplicationsEntity a = applicationsRepository.save(application);
+        String receiveremail = userEntityProxy.getEmail(relatedJob.getUsername());
+        notificationEntityProxy.sendNotification(new NotificationEntity(receiveremail, "Seeker applied to your job ", "Seeker "+username+" Applied to your job " + relatedJob.getJobDescription()));
         return ResponseEntity.created(new URI("/api/seekers/" + username + "/applications/" + a.getId())).body(a);
     }
 
@@ -85,7 +94,6 @@ public class ApplicationsController {
         if (!username.equals(application.getUsername())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
         applicationsRepository.deleteById(applicationId);
         return ResponseEntity.ok().build();
     }

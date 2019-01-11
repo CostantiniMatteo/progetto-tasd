@@ -22,6 +22,8 @@ import com.tasd.auth.model.UserDto;
 import com.tasd.auth.model.UserGeneral;
 import com.tasd.auth.proxy.CenterEntityProxy;
 import com.tasd.auth.proxy.JobCenterEntity;
+import com.tasd.auth.proxy.NotificationEntity;
+import com.tasd.auth.proxy.NotificationEntityProxy;
 import com.tasd.auth.proxy.SeekerEntity;
 import com.tasd.auth.proxy.SeekerEntityProxy;
 import com.tasd.auth.service.UserService;
@@ -39,6 +41,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Autowired
 	private UserRepo userRepo;
 
+	@Autowired
+	private NotificationEntityProxy notificationEntityProxy;
+	
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
 
@@ -90,6 +95,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
         return userDto;
     }
+    
+    @Override
+    public User findByUsername(String username) {
+    	return userRepo.findByUsername(username);
+    }
 
     @Override
     public ResponseEntity<User> save(UserGeneral user) {
@@ -97,6 +107,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	    newUser.setUsername(user.getUsername());
 	    newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 		newUser.setRole(user.getRole());
+		newUser.setEmail(user.getEmail());
 		if (!userRepo.existsByUsername(user.getUsername())) {
 			User newUserSave = userRepo.save(newUser);
 			dispatchUser(user);
@@ -109,14 +120,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void dispatchUser(UserGeneral user) {
     	if(user.getRole().equals(User.Role.JOB_CENTER)) {
     		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername(), user.getEmail()));
+    		sendEmail(new NotificationEntity(user.getEmail(), "Benvenuto nel portale di lavoro più famoso al mondo!", "Benvenuto caro Center " + user.getFirstName()));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
     		SeekerEntity newSeeker = new SeekerEntity(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCity(), user.getBirth(), user.getSkills());
     		seekerEntityProxy.createSeeker(newSeeker);
+    		sendEmail(new NotificationEntity(user.getEmail(), "Benvenuto nel portale di lavoro più famoso al mondo!", "Benvenuto caro Seeker " + user.getFirstName()));
     	}
     	else if(user.getRole().equals(User.Role.ADMIN)) {
 
     	}
+    }
+    
+    public void sendEmail(NotificationEntity notificationEntity) {
+    	notificationEntityProxy.sendNotification(notificationEntity);
     }
 
 }
