@@ -105,12 +105,7 @@ public class ApplicationsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         
-        try {
-        	JobEntityBean relatedJob = jobEntityProxy.getJob(loggedUser, application.getUsername(), application.getJobId());
-        }
-        catch(FeignException e) {
-        	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        JobEntityBean relatedJob = jobEntityProxy.getJob(loggedUser, application.getUsername(), application.getJobId());
         Date dateCreation = applicationsRepository.findById(applicationId).get().getDateCreation();
         application.setDateCreation(dateCreation);
         applicationsRepository.save(application);
