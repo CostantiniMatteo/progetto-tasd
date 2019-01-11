@@ -25,7 +25,7 @@ public class SearchController {
             location = locationOpt.get();
         }
 
-        List<JobEntity> result = jobsRepository.findUserByQuery(query, location);
+        List<JobEntity> result = jobsRepository.findJobByQuery(query, location);
         return ResponseEntity.ok(result);
     }
 
