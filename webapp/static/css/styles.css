@@ -636,17 +636,6 @@ nav{
 }
 
 
-@media (max-width:1023px){
-    .logo-club-div{
-      display:block;
-    }
-}
-
-@media (min-width:1024px){
-    .logo-club-div{
-      display: none;
-    }
-}
 
 
 
@@ -676,4 +665,8 @@ input[type="text"]#id_descr_ris_new::placeholder{
 
 .index-div {
   height: 100%;
+}
+
+.myth {
+  white-space: nowrap;
 }

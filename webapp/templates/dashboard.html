@@ -14,42 +14,34 @@
         </h2>
       </div>
       <div style="overflow: auto;display: block;">
-          <table class="mdl-data-table mdl-js-data-table">
+        {% if user.applications %}
+          <table class="mdl-data-table mdl-js-data-table" style="white-space: normal !important;">
             <thead>
               <tr>
-                <th class="mdl-data-table__cell--non-numeric">Position</th>
-                <th class="mdl-data-table__cell--non-numeric">Job Description</th>
-                <th class="mdl-data-table__cell--non-numeric">Location</th>
-                <th class="mdl-data-table__cell--non-numeric">Company Name</th>
+                <th class="myth mdl-data-table__cell--non-numeric">Position</th>
+                <th class="myth mdl-data-table__cell--non-numeric">Job Description</th>
+                <th class="myth mdl-data-table__cell--non-numeric">Location</th>
+                <th class="myth mdl-data-table__cell--non-numeric">Company Name</th>
               </tr>
             </thead>
             <tbody>
-              <tr onclick="document.location = '';">
-                <td class="mdl-data-table__cell--non-numeric">John Lennon</td>
-                <td class="mdl-data-table__cell--non-numeric">The smart one</td>
-                <td class="mdl-data-table__cell--non-numeric">40</td>
-                <td class="mdl-data-table__cell--non-numeric">No</td>
-              </tr>
-              <tr>
-                <td class="mdl-data-table__cell--non-numeric">Paul McCartney</td>
-                <td class="mdl-data-table__cell--non-numeric">The cute one</td>
-                <td class="mdl-data-table__cell--non-numeric">73</td>
-                <td class="mdl-data-table__cell--non-numeric">Yes</td>
-              </tr>
-              <tr>
-                <td class="mdl-data-table__cell--non-numeric">George Harrison</td>
-                <td class="mdl-data-table__cell--non-numeric">The shy one</td>
-                <td class="mdl-data-table__cell--non-numeric">58</td>
-                <td class="mdl-data-table__cell--non-numeric">No</td>
-              </tr>
-              <tr>
-                <td class="mdl-data-table__cell--non-numeric">Ringo Starr</td>
-                <td class="mdl-data-table__cell--non-numeric">The funny one</td>
-                <td class="mdl-data-table__cell--non-numeric">74</td>
-                <td class="mdl-data-table__cell--non-numeric">Yes</td>
-              </tr>
+              {% for app in user.applications %}
+                <tr onclick="document.location = '';">
+                  <td class="mdl-data-table__cell--non-numeric">{{app.position}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{app.jobDescription}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{app.location}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{app.companyName}}</td>
+                </tr>
+              {% endfor %}
             </tbody>
           </table>
+        {% else %}
+          <div id="error-parent" class="pres_atl-error">
+                <div id="error-child">
+                  <h1 class="mdl-card__title-text">There aren't applications yet</h1>
+                </div>
+          </div>
+        {% endif %}          
       </div>
     </div>
   </div>
@@ -57,7 +49,7 @@
 </div>
 
 
-
+{% if user.role == "SEEKER" %}
 <div class="mdl-grid">
   <div class="mdl-layout-spacer"></div>
   <div class="mdl-cell mdl-cell--10-col mdl-cell--12-col-tablet">
@@ -68,6 +60,7 @@
         </h2>
       </div>
       <div style="overflow: auto;display: block;">
+        {% if user.suggestions %}
           <table class="mdl-data-table mdl-js-data-table">
             <thead>
               <tr>
@@ -78,37 +71,30 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="mdl-data-table__cell--non-numeric">John Lennon</td>
-                <td class="mdl-data-table__cell--non-numeric">The smart one</td>
-                <td class="mdl-data-table__cell--non-numeric">40</td>
-                <td class="mdl-data-table__cell--non-numeric">No</td>
-              </tr>
-              <tr>
-                <td class="mdl-data-table__cell--non-numeric">Paul McCartney</td>
-                <td class="mdl-data-table__cell--non-numeric">The cute one</td>
-                <td class="mdl-data-table__cell--non-numeric">73</td>
-                <td class="mdl-data-table__cell--non-numeric">Yes</td>
-              </tr>
-              <tr>
-                <td class="mdl-data-table__cell--non-numeric">George Harrison</td>
-                <td class="mdl-data-table__cell--non-numeric">The shy one</td>
-                <td class="mdl-data-table__cell--non-numeric">58</td>
-                <td class="mdl-data-table__cell--non-numeric">No</td>
-              </tr>
-              <tr>
-                <td class="mdl-data-table__cell--non-numeric">Ringo Starr</td>
-                <td class="mdl-data-table__cell--non-numeric">The funny one</td>
-                <td class="mdl-data-table__cell--non-numeric">74</td>
-                <td class="mdl-data-table__cell--non-numeric">Yes</td>
-              </tr>
+              {% for sugg in user.suggestions %}
+                <tr onclick="document.location = '';">
+                  <td class="mdl-data-table__cell--non-numeric">{{sugg.position}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{sugg.jobDescription}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{sugg.location}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{sugg.companyName}}</td>
+                </tr>
+              {% endfor %}
             </tbody>
           </table>
+          {% else %}
+          <div id="error-parent" class="pres_atl-error">
+                <div id="error-child">
+                  <h1 class="mdl-card__title-text">There aren't suggestions yet</h1>
+                </div>
+          </div>
+          {% endif %}
       </div>
     </div>
   </div>
   <div class="mdl-layout-spacer"></div>
 </div>
+
+{% endif %}
 
 {% include 'footer.html' %}
 

@@ -14,16 +14,16 @@
         <header class="demo-drawer-header header">
           <img src="{{ url_for('static', filename='images/user.jpg') }}" class="logoclub">
           <div class="demo-avatar-dropdown user-name">
-            <span>{{username}}</span>
+            <span>{{user.username}}</span>
           </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-          <a class="mdl-navigation__link" href="">
+          <a class="mdl-navigation__link" href="{{url_for('dashboard')}}">
             <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>
             Dashboard
           </a>
 
-          <a class="mdl-navigation__link" href="">
+          <a class="mdl-navigation__link" href="{{url_for('all_jobs')}}">
             <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">work</i>
             All Jobs
           </a>
@@ -41,11 +41,4 @@
       </div>
 
       <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="mdl-grid logo-club-div">
-          <div class="mdl-layout-spacer"></div>
-            <div class="mdl-cell mdl-cell--12-col mdl-typography--text-center ">
-              <img src="" class="logo-club-main">
-            </div>
-            <div class="mdl-layout-spacer"></div>
-        </div>
         <div class='main-div'>
