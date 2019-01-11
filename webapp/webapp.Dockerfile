@@ -1,13 +1,9 @@
-FROM jazzdd/alpine-flask
-
-COPY requirements.txt /app/requirements.txt
-
-RUN pip install -r requirements.txt
+FROM jazzdd/alpine-flask:python3
 
 COPY . /app
 
-EXPOSE 80
-
 WORKDIR /app
 
-CMD ["python", "application.py"]
+RUN pip install -r requirements.txt
+
+EXPOSE 80
