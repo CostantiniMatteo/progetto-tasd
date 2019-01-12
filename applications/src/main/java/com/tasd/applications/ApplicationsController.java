@@ -37,11 +37,17 @@ public class ApplicationsController {
     }
 
     @RequestMapping(value = "/api/seekers/{username}/applications/", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationsEntity> createApplication(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username, @RequestBody ApplicationsEntity application) throws URISyntaxException {
+    public ResponseEntity<ApplicationsEntity> createApplication(@RequestHeader("X-User-Header") String loggedUser, 
+    															@RequestHeader("X-User-Role-Header") String role, 
+    															@PathVariable String username, 
+    															@RequestBody ApplicationsEntity application) throws URISyntaxException {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         JobEntityBean relatedJob;
+        if(!role.equals("SEEKER")) {
+        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         try {
         	relatedJob = jobEntityProxy.getJob(loggedUser, application.getUsername(), application.getJobId());
         }
@@ -100,11 +106,15 @@ public class ApplicationsController {
 
     @RequestMapping(value = "/api/seekers/{username}/applications/{applicationId}", method = RequestMethod.PUT)
     public ResponseEntity<ApplicationsEntity> updateApplication(@RequestHeader("X-User-Header") String loggedUser,
+    										   @RequestHeader("X-User-Role-Header") String role,
                                                @PathVariable String username,
                                                @PathVariable long applicationId,
                                                @RequestBody ApplicationsEntity application) {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if(!role.equals("SEEKER")) {
+        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         if (application.getId() != applicationId || !username.equals(application.getUsername())) {
