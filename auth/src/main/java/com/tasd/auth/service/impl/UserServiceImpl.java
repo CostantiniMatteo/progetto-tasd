@@ -66,13 +66,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	@Override
-	public void delete(String username) {
+	public ResponseEntity delete(String username) {
 		User user = userRepo.findByUsername(username);
 		userRepo.delete(user);
 		if ("SEEKER".equals(user.getRole().toString()))
 			seekerEntityProxy.deleteSeeker(username, user.getUsername());
 		else if ("JOB_CENTER".equals(user.getRole().toString()))
 			centerEntityProxy.deleteCenter(username, user.getUsername());
+		return ResponseEntity.ok().build();
 	}
 
 	@Override
@@ -87,13 +88,26 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
     @Override
-    public UserDto update(UserDto userDto) {
-        User user = findById(userDto.getId());
-        if(user != null) {
-            BeanUtils.copyProperties(userDto, user, "password");
-            userRepo.save(user);
+    public ResponseEntity update(String loggedUser, UserGeneral newUser) {
+        String username = newUser.getUsername();
+    	User user = findByUsername(username);
+        user.setUsername(newUser.getUsername());
+        user.setPassword(bcryptEncoder.encode(newUser.getPassword()));
+        user.setRole(newUser.getRole());
+        user.setEmail(newUser.getEmail());
+        userRepo.save(user);
+        if ("SEEKER".equals(newUser.getRole().toString())) {
+        	seekerEntityProxy.changeSeeker(loggedUser, username, 
+        			new SeekerEntity(newUser.getUsername(), newUser.getFirstName(), newUser.getLastName(), newUser.getEmail(), newUser.getCity(), newUser.getBirth(), newUser.getSkills()));
+        	return ResponseEntity.ok().build();
         }
-        return userDto;
+        
+        if ("JOB_CENTER".equals(newUser.getRole().toString())) {
+        	centerEntityProxy.changeCenter(loggedUser, username, 
+        			new JobCenterEntity(newUser.getCenterName(), newUser.getUsername(), newUser.getEmail()));
+        	return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
     }
     
     @Override

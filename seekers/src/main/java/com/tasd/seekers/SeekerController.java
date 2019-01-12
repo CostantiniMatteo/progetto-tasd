@@ -84,7 +84,7 @@ public class SeekerController {
 	 * @return 401 if user is not logged, 404 if user doesn't exist, 200 otherwise
 	 */
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.PUT)
-	public ResponseEntity deleteJobSeeker(@RequestHeader("X-User-Header") String loggedUser,
+	public ResponseEntity changeJobSeeker(@RequestHeader("X-User-Header") String loggedUser,
 										  @PathVariable String username,
 										  @RequestBody SeekerEntity seekerEntity) {
 		if (!username.equals(loggedUser)) {
