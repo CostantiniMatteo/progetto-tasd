@@ -27,11 +27,16 @@ public class JobsController {
     }
 
     @RequestMapping(value = "/api/centers/{username}/jobs", method = RequestMethod.POST)
-    public ResponseEntity<JobEntity> createJob(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username, @RequestBody JobEntity job) throws URISyntaxException {
+    public ResponseEntity<JobEntity> createJob(@RequestHeader("X-User-Header") String loggedUser, 
+    											@RequestHeader("X-User-Role-Header") String role,
+    											@PathVariable String username, 
+    											@RequestBody JobEntity job) throws URISyntaxException {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
+        if(!role.equals("JOB_CENTER")) {
+        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         job.setDateCreation(new Date());
         job.setUsername(username);
         JobEntity j = jobRepository.save(job);
@@ -71,6 +76,7 @@ public class JobsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+        
         JobEntity job = jobOpt.get();
         if (!username.equals(job.getUsername())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -82,11 +88,15 @@ public class JobsController {
 
     @RequestMapping(value = "/api/centers/{username}/jobs/{jobId}", method = RequestMethod.PUT)
     public ResponseEntity<JobEntity> updateJob(@RequestHeader("X-User-Header") String loggedUser,
+    										   @RequestHeader("X-User-Role-Header") String role,
                                                @PathVariable String username,
                                                @PathVariable long jobId,
                                                @RequestBody JobEntity job) {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if(!role.equals("JOB_CENTER")) {
+        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         if (job.getId() != jobId || !username.equals(job.getUsername())) {

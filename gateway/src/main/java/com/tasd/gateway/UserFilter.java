@@ -4,12 +4,13 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class UserFilter extends ZuulFilter {
 
     public static final String USER_HEADER = "X-User-Header";
-
+    public static final String USER_ROLE = "X-User-Role-Header";
     @Override
     public String filterType() {
         return FilterConstants.PRE_TYPE;
@@ -30,6 +31,11 @@ public class UserFilter extends ZuulFilter {
     public Object run() {
         RequestContext requestContext = RequestContext.getCurrentContext();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next().toString();
+        if(role != null) {
+        	System.out.println("PORCO DIO SONO UN?!?!??!" + role);
+        	requestContext.addZuulRequestHeader(USER_ROLE, role);
+        }
         requestContext.addZuulRequestHeader(USER_HEADER, username);
         return null;
     }
