@@ -118,7 +118,7 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - centersdb:/var/lib/postgresql/data
+      - centersdbdata:/var/lib/postgresql/data
     networks:
       - progetto-tasd
     healthcheck:
@@ -337,7 +337,7 @@ services:
   #     - progetto-tasd
   
 volumes: 
-  authdb:
+  authdbdata:
   centersdbdata:
   jobsdbdata:
   seekersdbdata:
