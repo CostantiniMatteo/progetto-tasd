@@ -276,6 +276,25 @@ services:
     restart: on-failure
     mem_limit: 500M
 
+  notification:
+    build:
+      context: ../notification
+      dockerfile: notification.Dockerfile
+    image: notification
+    container_name: notification
+    expose:
+      - 8203
+    ports:
+      - 8203:8203
+    networks:
+      - progetto-tasd
+    depends_on:
+      eurekaregistry:
+        condition:
+          service_started
+    restart: on-failure
+    mem_limit: 500M
+
   webapp:
      build:
        context: ../webapp
@@ -297,6 +316,7 @@ services:
            service_started
      restart: on-failure
      mem_limit: 500M
+
 
   # adminer:
   #   image: adminer
