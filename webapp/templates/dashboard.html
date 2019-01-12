@@ -4,6 +4,54 @@
 {% block content %}
 
 {% include 'sidebar_nav.html' %}
+
+{% if user.role == "JOB_CENTER" %}
+<div class="mdl-grid">
+  <div class="mdl-layout-spacer"></div>
+  <div class="mdl-cell mdl-cell--10-col mdl-cell--12-col-tablet">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title mdl-card--border">
+        <h2 class="mdl-card__title-text" style="padding-left: 7px;">
+          Your Jobs
+        </h2>
+      </div>
+      <div style="overflow: auto;display: block;">
+        {% if user.jobs %}
+          <table class="mdl-data-table mdl-js-data-table">
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">Position</th>
+                <th class="mdl-data-table__cell--non-numeric">Job Description</th>
+                <th class="mdl-data-table__cell--non-numeric">Location</th>
+                <th class="mdl-data-table__cell--non-numeric">Company Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for job in user.jobs %}
+                <tr onclick="document.location = '';">
+                  <td class="mdl-data-table__cell--non-numeric">{{job.position}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{job.jobDescription}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{job.location}}</td>
+                  <td class="mdl-data-table__cell--non-numeric">{{job.companyName}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div id="error-parent" class="pres_atl-error">
+            <div id="error-child">
+              <h1 class="mdl-card__title-text">There aren't jobs yet</h1>
+            </div>
+          </div>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="mdl-layout-spacer"></div>
+</div>
+
+{% endif %}
+
 <div class="mdl-grid">
   <div class="mdl-layout-spacer"></div>
   <div class="mdl-cell mdl-cell--10-col mdl-cell--12-col-tablet">

@@ -53,10 +53,21 @@ def dashboard():
         )
 
         user['suggestions'] = r_sugg.json()
+
+    elif user['role'] == 'JOB_CENTER':
+        jobs = requests.get(
+                BASE_URL + "/api/centers/" + user['username'] + "/jobs/",
+                headers=header
+            ).json()
+
+        user['jobs'] = jobs
+
+
         
     print(user)
 
-    return render_template('dashboard.html', user=user)
+    return render_template('dashboard.html', user=user, name_page='Dashboard')
+
 
 @app.route('/alljobs', methods = ['GET'])
 def all_jobs():
@@ -69,14 +80,20 @@ def all_jobs():
 
     header = { "authorization" : "Bearer " + j['token']}
 
+    if 'q' not in request.args:
+        params = dict()
+    else:
+        params = request.args.to_dict(flat=True)
+
     jobs = requests.get(
-        BASE_URL + "/api/centers/" + user['username'] + "/jobs/",
-        headers=header
+        BASE_URL + "/api/jobs/search",
+        headers=header,
+        params=params
     ).json()
 
     print(jobs)
 
-    return render_template('all_jobs.html', user=user, jobs=jobs)
+    return render_template('all_jobs.html', user=user, jobs=jobs, name_page='All Jobs')
 
 
 
