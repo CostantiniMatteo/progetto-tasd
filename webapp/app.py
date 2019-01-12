@@ -6,7 +6,7 @@ from base64 import b64decode
 
 app = Flask(__name__, static_url_path='')
 
-BASE_URL = "http://gateway:8080"
+BASE_URL = "http://localhost:8080"
 
 
 
@@ -94,6 +94,113 @@ def all_jobs():
     print(jobs)
 
     return render_template('all_jobs.html', user=user, jobs=jobs, name_page='All Jobs')
+
+
+@app.route('/seekers/<s_username>', methods = ['GET', 'POST'])
+def seeker_detail(s_username):
+    # Validazione
+    j = validate(request)
+
+    if not j:
+        abort(401)
+
+    user = {'username' : j['sub'], 'role' : j['authorities'][0]}
+
+    header = { "authorization" : "Bearer " + j['token']}
+
+    # Esistenza jobcenter
+    seeker = requests.get(
+        BASE_URL + "/api/seekers/" + s_username,
+        headers=header,
+        )
+
+    if seeker.status_code != 200:
+        abort(seeker.status_code)
+
+    # TODO: Controllo 
+    if request.method == 'POST' and s_username == user['username']:
+        r_json = request.form.to_dict(flat=True)
+
+        # r = requests.put(
+        #     BASE_URL + "/users/" + s_username,
+        #     headers=header,
+        #     json=r_json
+        #     )
+
+    seeker = seeker.json()
+
+    print(seeker)
+
+    return render_template('seeker_detail.html', user=user, seeker=seeker)
+
+
+@app.route('/jobcenter/<j_username>', methods = ['GET', 'POST'])
+def jobcenter_detail(j_username):
+    # Validazione
+    j = validate(request)
+
+    if not j:
+        abort(401)
+
+    user = {'username' : j['sub'], 'role' : j['authorities'][0]}
+
+    header = { "authorization" : "Bearer " + j['token']}
+
+    # Esistenza jobcenter
+    jobcenter = requests.get(
+        BASE_URL + "/api/centers/" + j_username,
+        headers=header,
+        )
+
+    if jobcenter.status_code != 200:
+        abort(jobcenter.status_code)
+
+    # TODO: Controllo 
+    if request.method == 'POST' and j_username == user['username']:
+        r_json = request.form.to_dict(flat=True)
+
+        # r = requests.put(
+        #     BASE_URL + "/users/" + j_username,
+        #     headers=header,
+        #     json=r_json
+        #     )
+
+
+    jobcenter = jobcenter.json()
+
+    jobs = requests.get(
+        BASE_URL + "/api/centers/" + j_username + "/jobs/",
+        headers=header
+    ).json()
+
+    jobcenter['jobs'] = jobs
+
+    print(jobcenter)
+
+    return render_template('jobcenter_detail.html', user=user, jobcenter=jobcenter)
+
+
+
+@app.route('/jobcenters', methods = ['GET', 'POST'])
+def jobcenter_list():
+    # Validazione
+    j = validate(request)
+
+    if not j:
+        abort(401)
+
+    user = {'username' : j['sub'], 'role' : j['authorities'][0]}
+
+    header = { "authorization" : "Bearer " + j['token']}
+
+    jobcenters = requests.get(
+        BASE_URL + "/api/centers/",
+        headers=header
+    ).json()
+
+    print(jobcenters)
+    
+    return render_template('jobcenter_list.html', user=user, jobcenters=jobcenters)
 
 
 
