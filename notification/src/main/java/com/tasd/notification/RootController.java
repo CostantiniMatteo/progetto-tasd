@@ -1,5 +1,8 @@
 package com.tasd.notification;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RootController {
 	
-		@Autowired
-		private SmtpMailSender smtpMailSender;
+//		@Autowired
+//		private GmailSender smtpMailSender;
 		
 		@RequestMapping(value = "api/send-notification", method = RequestMethod.POST)
-		public ResponseEntity sendNotification(@RequestBody NotificationEntity destinationMail) throws MessagingException {
-			if(checkFieldMail(destinationMail)) {
-				smtpMailSender.send(destinationMail.getDestination(), destinationMail.getSubject(), destinationMail.getBody());	
-				return ResponseEntity.status(HttpStatus.OK).build();
-			}
-			else {
+		public ResponseEntity sendNotification(@RequestBody NotificationEntity notification) {
+			if(checkFieldMail(notification)) {
+				//smtpMailSender.send(destinationMail.getDestination(), destinationMail.getSubject(), destinationMail.getBody());	
+				try {
+					GmailSender.sendMessage(notification.getDestination(), notification.getSubject(), notification.getBody());
+					return ResponseEntity.status(HttpStatus.OK).build();
+				} catch (Exception e) {
+					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+				}
+			} else {
 				return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).build();
 			}
-				
 		}
 		
 		
