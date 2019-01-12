@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class SeekerEntity {
 	
@@ -21,6 +23,7 @@ public class SeekerEntity {
 	private String firstName;
 	private String lastName;
 	private String city;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date birth;
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> skills;
