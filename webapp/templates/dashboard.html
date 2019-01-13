@@ -17,7 +17,7 @@
       </div>
       <div style="overflow: auto;display: block;">
         {% if user.jobs %}
-          <table class="mdl-data-table mdl-js-data-table">
+          <table class="mdl-data-table mdl-js-data-table" style="white-space: normal !important;">
             <thead>
               <tr>
                 <th class="mdl-data-table__cell--non-numeric">Position</th>
@@ -28,7 +28,7 @@
             </thead>
             <tbody>
               {% for job in user.jobs %}
-                <tr onclick="document.location = '';">
+                <tr onclick="document.location = '{{url_for('job_detail', j_username=user.username, job_id=job.id)}}';">
                   <td class="mdl-data-table__cell--non-numeric">{{job.position}}</td>
                   <td class="mdl-data-table__cell--non-numeric">{{job.jobDescription}}</td>
                   <td class="mdl-data-table__cell--non-numeric">{{job.location}}</td>
@@ -75,7 +75,7 @@
             </thead>
             <tbody>
               {% for app in user.applications %}
-                <tr onclick="document.location = '';">
+                <tr onclick="document.location = '{{url_for('job_detail', j_username=app.username, job_id=app.id)}}';">
                   <td class="mdl-data-table__cell--non-numeric">{{app.position}}</td>
                   <td class="mdl-data-table__cell--non-numeric">{{app.jobDescription}}</td>
                   <td class="mdl-data-table__cell--non-numeric">{{app.location}}</td>
@@ -110,7 +110,7 @@
       </div>
       <div style="overflow: auto;display: block;">
         {% if user.suggestions %}
-          <table class="mdl-data-table mdl-js-data-table">
+          <table class="mdl-data-table mdl-js-data-table" style="white-space: normal !important;">
             <thead>
               <tr>
                 <th class="mdl-data-table__cell--non-numeric">Position</th>
@@ -121,7 +121,7 @@
             </thead>
             <tbody>
               {% for sugg in user.suggestions %}
-                <tr onclick="document.location = '';">
+                <tr onclick="document.location = '{{url_for('job_detail', j_username=sugg.username, job_id=sugg.id)}}';">
                   <td class="mdl-data-table__cell--non-numeric">{{sugg.position}}</td>
                   <td class="mdl-data-table__cell--non-numeric">{{sugg.jobDescription}}</td>
                   <td class="mdl-data-table__cell--non-numeric">{{sugg.location}}</td>

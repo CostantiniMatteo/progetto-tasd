@@ -120,12 +120,22 @@ def seeker_detail(s_username):
     # TODO: Controllo 
     if request.method == 'POST' and s_username == user['username']:
         r_json = request.form.to_dict(flat=True)
+        r_json["role"] = "SEEKER"
+        r_json["skills"] = request.form.getlist("skill")
+        del r_json["skill"]
 
-        # r = requests.put(
-        #     BASE_URL + "/users/" + s_username,
-        #     headers=header,
-        #     json=r_json
-        #     )
+        if r_json["password"] == '':
+            del r_json["password"]
+
+        print(r_json)
+        r = requests.put(
+            BASE_URL + "/users/" + s_username,
+            headers=header,
+            json=r_json
+            )
+
+        print(r)
+
 
     seeker = seeker.json()
 
@@ -158,12 +168,17 @@ def jobcenter_detail(j_username):
     # TODO: Controllo 
     if request.method == 'POST' and j_username == user['username']:
         r_json = request.form.to_dict(flat=True)
+        r_json["role"] = "JOB_CENTER"
 
-        # r = requests.put(
-        #     BASE_URL + "/users/" + j_username,
-        #     headers=header,
-        #     json=r_json
-        #     )
+        if r_json["password"] == '':
+            del r_json["password"]
+
+        r = requests.put(
+            BASE_URL + "/users/" + j_username,
+            headers=header,
+            json=r_json
+            )
+        print(r)
 
 
     jobcenter = jobcenter.json()
@@ -204,10 +219,87 @@ def jobcenter_list():
 
 
 
+@app.route('/jobcenters/<j_username>/job/<job_id>', methods = ['GET', 'POST'])
+def job_detail(j_username, job_id):
+    # Validazione
+    j = validate(request)
+
+    if not j:
+        abort(401)
+
+    user = {'username' : j['sub'], 'role' : j['authorities'][0]}
+
+    header = { "authorization" : "Bearer " + j['token']}  
+    
+    # Sono seeker e mi sto applicando
+    if request.method == 'POST' and 'apply' in request.form:
+
+        r = requests.post(
+            BASE_URL + "/api/seekers/" + user["username"] + "/applications/",
+            headers=header,
+            json={"username" : user["username"], "jobId" : job_id}
+            )
+
+        if r.status_code != 200:
+            abort(r.status_code)
+
+    elif request.method == 'POST' and 'position' in request.form:
+        data = request.form.to_dict(flat=True)
+        data["id"] = job_id
+        data["username"] = user["username"]
+
+        r = requests.put(
+            BASE_URL + "/api/centers/" + user["username"] + "/jobs/" + job_id,
+            headers=header,
+            json=data
+            )
+
+        print(r)
+
+        print(data)
+
+
+    job = requests.get(
+        BASE_URL + "/api/centers/" + j_username + "/jobs/" + job_id,
+        headers=header
+    )
+
+    job = job.json()
+
+    if user["role"] == "JOB_CENTER" and user["username"] == j_username:
+        applications = requests.get(
+            BASE_URL + "/api/centers/" + j_username + "/jobs/" + job_id + "/applications",
+            headers=header
+        )
+
+        applications = applications.json()
+
+        job["applications"] = []
+
+        for a in applications:
+            s_username = a["username"]
+
+            seeker = requests.get(
+                BASE_URL + "/api/seekers/" + s_username,
+                headers=header
+            ).json()
+
+            job["applications"] += [seeker]
+
+    print(job)
+
+    return render_template('job_detail.html', user=user, job=job)
+
+
+
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
+        print("ciaooo")
+        if not data:
+            data = request.args["cred"]
+
         print(data)
         r = requests.post(BASE_URL + "/token/generate-token", json=data)
 
@@ -226,6 +318,13 @@ def login():
     return render_template('login.html')
 
 
+@app.route("/logout", methods=['GET'])
+def logout():
+    resp = make_response(render_template('logout.html'))
+    resp.set_cookie('bearer', '', expires=0)
+    return resp
+
+
 @app.route('/signup/jobcenter', methods = ['GET', 'POST'])
 def signup_jobcenter():
 
@@ -234,6 +333,8 @@ def signup_jobcenter():
         r_json["role"] = "JOB_CENTER"
         print(r_json)
         print(requests.post(BASE_URL + "/signup", json=r_json))
+
+        return redirect(url_for('login', cred={'username' : r_json['username'], 'password' : r_json['password']}), code=307)
 
     return render_template('signup_jobcenter.html')
 
@@ -248,6 +349,8 @@ def signup_seeker():
         del r_json["skill"]
         print(r_json)
         print(requests.post(BASE_URL + "/signup", json=r_json))
+
+        return redirect(url_for('login', cred={'username' : r_json['username'], 'password' : r_json['password']}), code=307)
 
     return render_template('signup_seeker.html')
 

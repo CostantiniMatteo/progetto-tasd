@@ -19,10 +19,12 @@
   function checkForm() {
     var errors_text = "";
     $('div.required > input').each(function (){
-      if ($(this).val().length === 0){
-        var label = $("label[for='" + $(this).attr('id') + "']");
-        errors_text += label.text() + " is required, ";
-        console.log(errors_text);
+      if ($(this).attr('id') !== "id_conf_pass" && $(this).attr('id') !== "id_pass"){
+        if ($(this).val().length === 0){
+          var label = $("label[for='" + $(this).attr('id') + "']");
+          errors_text += label.text() + " is required, ";
+          console.log(errors_text);
+        }
       }
     });
 
