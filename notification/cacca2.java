@@ -1,34 +1,3 @@
-package com.tasd.applications;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import com.tasd.applications.UserEntity.Role;
-
-import feign.FeignException;
-
-@RestController
-public class ApplicationsController {
-
-	@Autowired
-	private JobEntityProxy jobEntityProxy;
-
-	@Autowired
-	private ApplicationsRepository applicationsRepository;
-
-	@Autowired
-	private UserEntityProxy userEntityProxy;
-
-	@Autowired
-	private NotificationEntityProxy notificationEntityProxy;
-
 	@RequestMapping(value = "/api/centers/{username}/applications/", method = RequestMethod.GET)
 	public ResponseEntity<List<ApplicationsEntity>> getCentersApplications(
 			@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
@@ -43,7 +12,7 @@ public class ApplicationsController {
 
 		return ResponseEntity.ok().body(applicationsRepository.findAllByCenterUsername(username));
 	}
-	
+
 	@RequestMapping(value = "/api/centers/{username}/jobs/{jobId}/applications", method = RequestMethod.GET)
 	public ResponseEntity<List<ApplicationsEntity>> getCentersApplications(@RequestHeader("X-User-Header") String loggedUser,
 	                                                                       @PathVariable String username,
@@ -51,16 +20,16 @@ public class ApplicationsController {
 	    if (!username.equals(loggedUser)) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	    }
-	
+
 	    UserEntity user = userEntityProxy.getUser(username);
 	    if (!Role.JOB_CENTER.equals(user.getRole())) {
 	        ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	    }
-	
+
 	    // TODO: Aggiungere controlli se c'è tempo
 	    return ResponseEntity.ok().body(applicationsRepository.findAllByJobId(jobId));
 	}
-	
+
 	@RequestMapping(value = "/api/seekers/{username}/applications/", method = RequestMethod.GET)
 	public ResponseEntity<List<ApplicationsEntity>> getApplications(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username) {
@@ -164,4 +133,3 @@ public class ApplicationsController {
 		applicationsRepository.save(application);
 		return ResponseEntity.ok(application);
 	}
-}

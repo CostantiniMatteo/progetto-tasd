@@ -72,8 +72,7 @@ public class SeekerController {
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.GET)
 	public ResponseEntity<SeekerEntity> getJobSeeker(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username) {
-		if (!username.equals(loggedUser))
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		
 
 		SeekerEntity seekerEntity = seekerRepository.findByUsername(username);
 		if (seekerEntity == null)

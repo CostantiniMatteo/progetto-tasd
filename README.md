@@ -14,6 +14,8 @@ The service Notification is the service responsible of notifying users of applic
 The service Job Advisor is the service responsible of computing skills-based suggestions, and exposes API to provide job suggestions to the seeker.  
 The service Seeker is the service responsible of managing users, and exposes CRUD API for users.  
 
+## Run
+
 ### Prerequisites
 
 To run the whole application, a docker machine with at least 6500 MB of RAM is needed.
