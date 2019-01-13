@@ -22,7 +22,7 @@ zuul:
       path: /api/centers/*
       stripPrefix: false
     jobs:
-      path: /api/centers/*/jobs/**
+      path: /api/centers/*/jobs/*
       stripPrefix: false
     search:
       path: /api/jobs/search
@@ -41,6 +41,10 @@ zuul:
       serviceId: applications
     applicationsCenters:
       path: /api/centers/*/applications/*
+      stripPrefix: false
+      serviceId: applications
+    applicationsJob:
+      path: /api/centers/*/jobs/*/applications
       stripPrefix: false
       serviceId: applications
     notification:

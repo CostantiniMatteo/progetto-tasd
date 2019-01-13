@@ -43,6 +43,23 @@ public class ApplicationsController {
         return ResponseEntity.ok().body(applicationsRepository.findAllByCenterUsername(username));
     }
 
+    @RequestMapping(value = "/api/centers/{username}/jobs/{jobId}/applications", method = RequestMethod.GET)
+    public ResponseEntity<List<ApplicationsEntity>> getCentersApplications(@RequestHeader("X-User-Header") String loggedUser,
+                                                                           @PathVariable String username,
+                                                                           @PathVariable long jobId) {
+        if (!username.equals(loggedUser)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserEntity user = userEntityProxy.getUser(username);
+        if (!Role.JOB_CENTER.equals(user.getRole())) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // TODO: Aggiungere controlli se c'è tempo
+        return ResponseEntity.ok().body(applicationsRepository.findAllByJobId(jobId));
+    }
+
     @RequestMapping(value = "/api/seekers/{username}/applications/", method = RequestMethod.GET)
     public ResponseEntity<List<ApplicationsEntity>> getApplications(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
         if (!username.equals(loggedUser)) {
