@@ -293,9 +293,11 @@ services:
     image: notification
     container_name: notification
     expose:
-      - 8203
+      - 8900
+      - 8888
     ports:
-      - 8203:8203
+      - 8900:8900
+      - 8888:8888
     networks:
       - progetto-tasd
     depends_on:
