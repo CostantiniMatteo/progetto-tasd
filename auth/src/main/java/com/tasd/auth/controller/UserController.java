@@ -38,9 +38,9 @@ public class UserController {
         return new ApiResponse<>(HttpStatus.OK.value(), "User list fetched successfully.",userService.findAll());
     }
 
-    @GetMapping("/users/{id}")
-    public ApiResponse<User> getOne(@PathVariable int id){
-        return new ApiResponse<>(HttpStatus.OK.value(), "User fetched successfully.",userService.findById(id));
+    @GetMapping("/users/{username}")
+    public ResponseEntity getOne(@PathVariable String username){
+        return ResponseEntity.ok(userService.findByUsername(username));
     }
 
     @PutMapping("/users/{username}")
@@ -68,6 +68,6 @@ public class UserController {
     	}
     	return null;
     }
-    
+
 
 }

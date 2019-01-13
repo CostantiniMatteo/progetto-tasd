@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.tasd.applications.UserEntity.Role;
 
 import feign.FeignException;
 @RestController
@@ -17,35 +18,55 @@ public class ApplicationsController {
 
 	@Autowired
 	private JobEntityProxy jobEntityProxy;
-	
+
 	@Autowired
     private ApplicationsRepository applicationsRepository;
 
 	@Autowired
 	private UserEntityProxy userEntityProxy;
-	
+
 	@Autowired
 	private NotificationEntityProxy notificationEntityProxy;
-	
+
+
+    @RequestMapping(value = "/api/centers/{username}/applications/", method = RequestMethod.GET)
+    public ResponseEntity<List<ApplicationsEntity>> getCentersApplications(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
+        if (!username.equals(loggedUser)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserEntity user = userEntityProxy.getUser(username);
+        if (!Role.JOB_CENTER.equals(user.getRole())) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok().body(applicationsRepository.findAllByCenterUsername(username));
+    }
+
     @RequestMapping(value = "/api/seekers/{username}/applications/", method = RequestMethod.GET)
     public ResponseEntity<List<ApplicationsEntity>> getApplications(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        UserEntity user = userEntityProxy.getUser(username);
+        if (!Role.SEEKER.equals(user.getRole())) {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         return ResponseEntity.ok().body(applicationsRepository.findAllByUsername(username));
     }
 
     @RequestMapping(value = "/api/seekers/{username}/applications/", method = RequestMethod.POST)
-    public ResponseEntity<ApplicationsEntity> createApplication(@RequestHeader("X-User-Header") String loggedUser, 
-    															@RequestHeader("X-User-Role-Header") String role, 
-    															@PathVariable String username, 
+    public ResponseEntity<ApplicationsEntity> createApplication(@RequestHeader("X-User-Header") String loggedUser,
+    															@RequestHeader("X-User-Role-Header") String role,
+    															@PathVariable String username,
     															@RequestBody ApplicationsEntity application) throws URISyntaxException {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         JobEntityBean relatedJob;
-        if(!role.equals("SEEKER")) {
+        if(!"SEEKER".equals(role)) {
         	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         try {
@@ -57,6 +78,7 @@ public class ApplicationsController {
         application.setDateCreation(new Date());
         application.setUsername(username);
         application.setJobId(application.getJobId());
+        application.setCenterUsername(relatedJob.getUsername());
         ApplicationsEntity a = applicationsRepository.save(application);
         String receiveremail = userEntityProxy.getEmail(relatedJob.getUsername());
         notificationEntityProxy.sendNotification(new NotificationEntity(receiveremail, "Seeker applied to your job ", "Seeker "+username+" Applied to your job " + relatedJob.getJobDescription()));
@@ -113,14 +135,14 @@ public class ApplicationsController {
         if (!username.equals(loggedUser)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        if(!role.equals("SEEKER")) {
+        if(!"SEEKER".equals(role)) {
         	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         if (application.getId() != applicationId || !username.equals(application.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        
+
         JobEntityBean relatedJob = jobEntityProxy.getJob(loggedUser, application.getUsername(), application.getJobId());
         Date dateCreation = applicationsRepository.findById(applicationId).get().getDateCreation();
         application.setDateCreation(dateCreation);

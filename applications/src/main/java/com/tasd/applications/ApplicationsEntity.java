@@ -16,7 +16,8 @@ public class ApplicationsEntity {
 	private String username;
 	private Date dateCreation;
 	private long jobId;
-	
+	private String centerUsername;
+
 	public ApplicationsEntity(String username, Date dateCreation, long jobId) {
 		this.username = username;
 		this.dateCreation = dateCreation;
@@ -29,11 +30,11 @@ public class ApplicationsEntity {
 	public long getJobId() {
 		return jobId;
 	}
-	
+
 	public void setJobId(long jobId) {
 		this.jobId = jobId;
 	}
-	
+
 	public Date getDateCreation() {
 		return dateCreation;
 	}
@@ -60,5 +61,13 @@ public class ApplicationsEntity {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getCenterUsername() {
+		return centerUsername;
+	}
+
+	public void setCenterUsername(String centerUsername) {
+		this.centerUsername = centerUsername;
 	}
 }

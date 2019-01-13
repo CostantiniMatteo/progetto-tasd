@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	@Autowired
 	private NotificationEntityProxy notificationEntityProxy;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
 
@@ -69,9 +69,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	public ResponseEntity delete(String username) {
 		User user = userRepo.findByUsername(username);
 		userRepo.delete(user);
-		if ("SEEKER".equals(user.getRole().toString()))
+		if (User.Role.SEEKER.equals(user.getRole()))
 			seekerEntityProxy.deleteSeeker(username, user.getUsername());
-		else if ("JOB_CENTER".equals(user.getRole().toString()))
+		else if (User.Role.JOB_CENTER.equals(user.getRole()))
 			centerEntityProxy.deleteCenter(username, user.getUsername());
 		return ResponseEntity.ok().build();
 	}
@@ -98,19 +98,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(!(user.getRole().equals(newUser.getRole()))) {
         	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        if ("SEEKER".equals(newUser.getRole().toString())) {
-        	seekerEntityProxy.changeSeeker(loggedUser, username, 
+        if (User.Role.SEEKER.equals(newUser.getRole())) {
+        	seekerEntityProxy.changeSeeker(loggedUser, username,
         			new SeekerEntity(newUser.getUsername(), newUser.getFirstName(), newUser.getLastName(), newUser.getEmail(), newUser.getCity(), newUser.getBirth(), newUser.getSkills()));
         }
-        
-        if ("JOB_CENTER".equals(newUser.getRole().toString())) {
-        	centerEntityProxy.changeCenter(loggedUser, username, 
+
+        if (User.Role.JOB_CENTER.equals(newUser.getRole())) {
+        	centerEntityProxy.changeCenter(loggedUser, username,
         			new JobCenterEntity(newUser.getCenterName(), newUser.getUsername(), newUser.getEmail()));
         }
         userRepo.save(user);
         return ResponseEntity.ok().build();
     }
-    
+
     @Override
     public User findByUsername(String username) {
     	return userRepo.findByUsername(username);
@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     	}
     }
-    
+
     public void sendEmail(NotificationEntity notificationEntity) {
     	notificationEntityProxy.sendNotification(notificationEntity);
     }
