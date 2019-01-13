@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(name = "auth")
 @RibbonClient(name = "auth")
 public interface UserEntityProxy {
-	
+
 	@RequestMapping(value = "/recover-email/{username}", method = RequestMethod.GET)
-	String getEmail(@PathVariable String username); 
+	String getEmail(@PathVariable String username);
+
+	@RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
+    UserEntity getUser(@PathVariable String username);
 }
