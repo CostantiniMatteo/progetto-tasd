@@ -95,19 +95,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         user.setPassword(bcryptEncoder.encode(newUser.getPassword()));
         user.setRole(newUser.getRole());
         user.setEmail(newUser.getEmail());
-        userRepo.save(user);
+        if(!(user.getRole().equals(newUser.getRole()))) {
+        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         if ("SEEKER".equals(newUser.getRole().toString())) {
         	seekerEntityProxy.changeSeeker(loggedUser, username, 
         			new SeekerEntity(newUser.getUsername(), newUser.getFirstName(), newUser.getLastName(), newUser.getEmail(), newUser.getCity(), newUser.getBirth(), newUser.getSkills()));
-        	return ResponseEntity.ok().build();
         }
         
         if ("JOB_CENTER".equals(newUser.getRole().toString())) {
         	centerEntityProxy.changeCenter(loggedUser, username, 
         			new JobCenterEntity(newUser.getCenterName(), newUser.getUsername(), newUser.getEmail()));
-        	return ResponseEntity.ok().build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+        userRepo.save(user);
+        return ResponseEntity.ok().build();
     }
     
     @Override
@@ -123,8 +124,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		newUser.setRole(user.getRole());
 		newUser.setEmail(user.getEmail());
 		if (!userRepo.existsByUsername(user.getUsername())) {
-			User newUserSave = userRepo.save(newUser);
 			dispatchUser(user);
+			User newUserSave = userRepo.save(newUser);
 			return ResponseEntity.ok().body(newUserSave);
 		} else {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -134,7 +135,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void dispatchUser(UserGeneral user) {
     	if(user.getRole().equals(User.Role.JOB_CENTER)) {
     		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername(), user.getEmail()));
-    		sendEmail(new NotificationEntity(user.getEmail(), "Benvenuto nel portale di lavoro più famoso al mondo!", "Benvenuto caro Center " + user.getFirstName()));
+    		sendEmail(new NotificationEntity(user.getEmail(), "Benvenuto nel portale di lavoro più famoso al mondo!", "Benvenuto caro Center " + user.getCenterName()));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
     		SeekerEntity newSeeker = new SeekerEntity(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCity(), user.getBirth(), user.getSkills());

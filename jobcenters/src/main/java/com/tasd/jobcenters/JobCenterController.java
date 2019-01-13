@@ -59,9 +59,28 @@ public class JobCenterController {
 		if (!username.equals(jobCenter.getUsername())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
-
-		jobCenterRepository.save(jobCenter);
-		return ResponseEntity.ok(jobCenter);
+		if(!checkField(jobCenter)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		JobCenterEntity jobCenterOld = jobCenterRepository.findByUsername(username);
+		jobCenterOld.setName(jobCenter.getName());
+		jobCenterOld.setEmail(jobCenter.getEmail());
+		jobCenterRepository.save(jobCenterOld);
+		return ResponseEntity.ok(jobCenterOld);
+	}
+	
+	
+	private boolean checkField(JobCenterEntity jobCenterEntity) {
+		if(jobCenterEntity.getUsername() == null) {
+			return false;
+		}
+		if(jobCenterEntity.getEmail() == null) {
+			return false;
+		}
+		if(jobCenterEntity.getName() == null) {
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -94,9 +94,41 @@ public class SeekerController {
 		if (!username.equals(seekerEntity.getUsername())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
-
-		seekerRepository.save(seekerEntity);
-		return ResponseEntity.ok(seekerEntity);
+		if(!checkFieldUpdate(seekerEntity)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		
+		SeekerEntity seekerEntityOld = seekerRepository.findByUsername(username);
+		seekerEntityOld.setUsername(seekerEntity.getUsername());
+		seekerEntityOld.setFirstName(seekerEntity.getFirstName());
+		seekerEntityOld.setLastName(seekerEntity.getLastName());
+		seekerEntityOld.setCity(seekerEntity.getCity());
+		seekerEntityOld.setEmail(seekerEntity.getEmail());
+		seekerEntityOld.setSkills(seekerEntity.getSkills());
+		seekerRepository.save(seekerEntityOld);
+		return ResponseEntity.ok(seekerEntityOld);
+	}
+	
+	private boolean checkFieldUpdate(SeekerEntity newSeeker) {
+		if(newSeeker.getUsername()==null) {
+			return false;
+		}
+		if(newSeeker.getFirstName() == null) {
+			return false;
+		}
+		if(newSeeker.getLastName()==null) {
+			return false;
+		}
+		if(newSeeker.getEmail() == null) {
+			return false;
+		}
+		if(newSeeker.getCity()==null) {
+			return false;
+		}
+		if(newSeeker.getBirth() ==null) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

@@ -23,7 +23,7 @@ public interface SeekerEntityProxy {
 			@PathVariable String username);
 	
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.PUT)
-	ResponseEntity changeSeeker(@RequestHeader("X-User-Header") String loggedUser, 
+	public ResponseEntity changeSeeker(@RequestHeader("X-User-Header") String loggedUser, 
 								@PathVariable String username, 
 								@RequestBody SeekerEntity seekerEntity);
 
