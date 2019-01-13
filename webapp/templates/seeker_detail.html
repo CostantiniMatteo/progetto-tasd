@@ -57,10 +57,12 @@
   function checkForm() {
     var errors_text = "";
     $('div.required > input').each(function (){
-      if ($(this).val().length === 0){
-        var label = $("label[for='" + $(this).attr('id') + "']");
-        errors_text += label.text() + " is required, ";
-        console.log(errors_text);
+      if ($(this).attr('id') !== "id_conf_pass" && $(this).attr('id') !== "id_pass"){
+        if ($(this).val().length === 0){
+          var label = $("label[for='" + $(this).attr('id') + "']");
+          errors_text += label.text() + " is required, ";
+          console.log(errors_text);
+        }
       }
     });
 
@@ -194,6 +196,7 @@
               <h5>Skills</h5>
 
               <div class="layout-row row skills">
+                {% if seeker.skills %}
                 {% for skill in seeker.skills %}
                   <div class="col s12 m10">
                     <div class="row">
@@ -215,7 +218,18 @@
                       </div>
                     </div>
                   {% endif %}
-                {% endfor %}
+                {% endfor %}              
+                {% else %}
+                    <div class="col s12 m10">
+                      <div class="row">
+                        <div class="input-field col s12 skill_container required"  id="skill_container">
+                          <textarea class="materialize-textarea" cols="40" id="skill" name="skill" rows="10" style="height: 44px;"></textarea>
+                          <span class="add-skill"><i style="cursor: pointer;" class="material-icons prefix">add_circle</i></span>
+                          <label class="active" for="skill"></label>
+                        </div>
+                      </div>
+                    </div>  
+                {% endif %}
               </div>
             </div>
           </div>
