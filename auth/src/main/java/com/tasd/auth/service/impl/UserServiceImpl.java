@@ -135,12 +135,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void dispatchUser(UserGeneral user) {
     	if(user.getRole().equals(User.Role.JOB_CENTER)) {
     		centerEntityProxy.createCenter(new JobCenterEntity(user.getCenterName(), user.getUsername(), user.getEmail()));
-    		sendEmail(new NotificationEntity(user.getEmail(), "Benvenuto nel portale di lavoro più famoso al mondo!", "Benvenuto caro Center " + user.getCenterName()));
+    		sendEmail(new NotificationEntity(user.getEmail(), "Benvenuto nel portale di lavoro più famoso al mondo!", "Benvenuto caro Center " + user.getCenterName(), null));
     	}
     	else if(user.getRole().equals(User.Role.SEEKER)) {
     		SeekerEntity newSeeker = new SeekerEntity(user.getUsername(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getCity(), user.getBirth(), user.getSkills());
     		seekerEntityProxy.createSeeker(newSeeker);
-    		sendEmail(new NotificationEntity(user.getEmail(), "Benvenuto nel portale di lavoro più famoso al mondo!", "Benvenuto caro Seeker " + user.getFirstName()));
+    		sendEmail(new NotificationEntity(user.getEmail(), "Benvenuto nel portale di lavoro più famoso al mondo!", "Benvenuto caro Seeker " + user.getFirstName(), null));
     	}
     	else if(user.getRole().equals(User.Role.ADMIN)) {
 

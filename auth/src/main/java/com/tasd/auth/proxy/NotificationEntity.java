@@ -6,13 +6,31 @@ public class NotificationEntity {
 	private String subject;
 	private String body;
 	
-	public NotificationEntity(String destination, String subject, String body) {
+	/**
+	 * 
+	 * This field refers to the username of the seeker that is applying to this job.
+	 * If this is not null, then we have to attach the curriculum.
+	 * 
+	 */
+	private String username;
+	
+	public NotificationEntity(String destination, String subject, String body, String username) {
 		super();
 		this.destination = destination;
 		this.subject = subject;
 		this.body = body;
+		this.username = username;
+		
 	}
 	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getDestination() {
 		return destination;
 	}

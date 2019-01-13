@@ -1,11 +1,7 @@
 package com.tasd.notification;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import java.io.InputStream;
 
-import javax.mail.MessagingException;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RootController {
+public class NotificationController {
 	
 //		@Autowired
 //		private GmailSender smtpMailSender;
@@ -24,7 +20,12 @@ public class RootController {
 			if(checkFieldMail(notification)) {
 				//smtpMailSender.send(destinationMail.getDestination(), destinationMail.getSubject(), destinationMail.getBody());	
 				try {
-					GmailSender.sendMessage(notification.getDestination(), notification.getSubject(), notification.getBody());
+					if (notification.getUsername() == null)
+						GmailSender.sendMessage(notification.getDestination(), notification.getSubject(), notification.getBody());
+					else {
+						InputStream in = CouchDBHelper.getDocument(notification.getUsername());
+						GmailSender.sendMessage(notification.getDestination(), notification.getSubject(), notification.getBody(), in);
+					}
 					return ResponseEntity.status(HttpStatus.OK).build();
 				} catch (Exception e) {
 					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

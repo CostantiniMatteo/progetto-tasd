@@ -31,6 +31,10 @@ zuul:
       path: /api/seekers/*
       stripPrefix: false
       serviceId: seekers
+    upload:
+      path: /api/seekers/*/cv
+      stripPrefix: false
+      serviceId: seekers
     skills:
       path: /api/seekers/*/skills/**
       stripPrefix: false

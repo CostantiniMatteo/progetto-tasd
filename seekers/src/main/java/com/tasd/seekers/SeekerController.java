@@ -1,18 +1,25 @@
 package com.tasd.seekers;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -29,7 +36,7 @@ public class SeekerController {
 
 	@Autowired
 	private SeekerRepository seekerRepository;
-
+	
 	/**
 	 * This method return the list of all the seekers.
 	 * Should be called only by ADMINS.
@@ -131,6 +138,16 @@ public class SeekerController {
 		return true;
 	}
 
+	@RequestMapping(value = "/api/seekers/{username}/cv", method = RequestMethod.POST)
+	public ResponseEntity saveCurriculum(@PathVariable String username, @RequestParam("file") MultipartFile file) {
+		try {
+			CouchDBHelper.saveDocument(username, file.getInputStream());
+		} catch (IOException e) {
+			return ResponseEntity.badRequest().build();
+		}
+		return ResponseEntity.ok().build();
+	}
+	
 	/**
 	 * This method is used to delete personal information of the registered seeker.
 	 *

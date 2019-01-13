@@ -106,6 +106,10 @@ public class GmailSender {
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
+
+	public static void sendMessage(String destination, String subject, String body, InputStream in) {
+		
+	}
     
 
 }

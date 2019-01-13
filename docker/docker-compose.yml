@@ -225,6 +225,22 @@ services:
       test: "exit 0"
     mem_limit: 250M
 
+  pdfdb:
+     image: couchdb
+     ports:
+        - 5984:5984
+     container_name: pdfdb
+     environment:
+        - COUCHDB_USER=couchdb
+        - COUCHDB_PASSWORD=1234
+     volumes:
+        - pdfdbdata:/opt/couchdb/data
+     networks:
+        - progetto-tasd
+     healthcheck:
+       test: "exit 0"
+     mem_limit: 250M
+
   seekers:
     build:
       context: ../seekers
@@ -239,6 +255,9 @@ services:
       - progetto-tasd
     depends_on:
       seekersdb:
+        condition:
+          service_healthy
+      pdfdb:
         condition:
           service_healthy
       eurekaregistry:
@@ -337,14 +356,15 @@ services:
   #     - 8080
   #   networks:
   #     - progetto-tasd
-  
-volumes: 
+
+volumes:
+  pdfdbdata:
   authdbdata:
   centersdbdata:
   jobsdbdata:
   seekersdbdata:
   applicationsdbdata:
-  
+
 networks:
   progetto-tasd:
     driver: bridge
