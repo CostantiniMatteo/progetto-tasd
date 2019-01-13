@@ -16,5 +16,5 @@ public interface UserEntityProxy {
 	String getEmail(@PathVariable String username);
 
 	@RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
-    UserEntity getUser(String username);
+    UserEntity getUser(@PathVariable String username);
 }
