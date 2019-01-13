@@ -39,6 +39,10 @@ zuul:
       path: /api/seekers/*/applications/**
       stripPrefix: false
       serviceId: applications
+    applicationsCenters:
+      path: /api/centers/*/applications/*
+      stripPrefix: false
+      serviceId: applications
     notification:
       path: /api/send-notification
       stripPrefix: false
