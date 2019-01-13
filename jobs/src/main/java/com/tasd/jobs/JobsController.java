@@ -46,9 +46,6 @@ public class JobsController {
 
     @RequestMapping(value = "/api/centers/{username}/jobs/{jobId}", method = RequestMethod.GET)
     public ResponseEntity<JobEntity> getJob(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username, @PathVariable long jobId) {
-        if (!username.equals(loggedUser)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
         Optional<JobEntity> jobOpt = jobRepository.findById(jobId);
         if (!jobOpt.isPresent()) {
