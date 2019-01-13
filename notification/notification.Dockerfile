@@ -11,7 +11,7 @@ ADD . /usr/src/app
 RUN mvn install -DskipTests
 
 FROM openjdk:8-jre-alpine
-ADD src/main/resources/credentials.json /credentials.json
 COPY --from=build /usr/src/app/target/notification-0.0.1-SNAPSHOT.jar /app/app.jar
-EXPOSE 8600
+ADD ./tokens /tokens
+EXPOSE 8900
 ENTRYPOINT ["/usr/bin/java", "-jar", "/app/app.jar"]

@@ -37,7 +37,7 @@ public class GmailSender {
 	private static final String SENDER = "tasd.project@gmail.com";
     private static final String APPLICATION_NAME = "progetto-tasd";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static final String TOKENS_DIRECTORY_PATH = "/tokens";
     private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
     
@@ -87,7 +87,7 @@ public class GmailSender {
     	          .build();
     	Message message = createMessageWithEmail(createEmail(destination, SENDER, subject, body));
         message = service.users().messages().send("me", message).execute();
-
+        System.out.println(message + "PORCOOOOOOO");
         return message;
     }
 
