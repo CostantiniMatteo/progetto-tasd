@@ -92,7 +92,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         String username = newUser.getUsername();
     	User user = findByUsername(username);
         user.setUsername(newUser.getUsername());
-        user.setPassword(bcryptEncoder.encode(newUser.getPassword()));
+        if(newUser.getPassword() != null) {
+        	user.setPassword(bcryptEncoder.encode(newUser.getPassword()));
+        }
         user.setRole(newUser.getRole());
         user.setEmail(newUser.getEmail());
         if(!(user.getRole().equals(newUser.getRole()))) {
