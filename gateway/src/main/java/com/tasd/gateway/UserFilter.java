@@ -33,7 +33,6 @@ public class UserFilter extends ZuulFilter {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         String role = SecurityContextHolder.getContext().getAuthentication().getAuthorities().iterator().next().toString();
         if(role != null) {
-        	System.out.println("PORCO DIO SONO UN?!?!??!" + role);
         	requestContext.addZuulRequestHeader(USER_ROLE, role);
         }
         requestContext.addZuulRequestHeader(USER_HEADER, username);
