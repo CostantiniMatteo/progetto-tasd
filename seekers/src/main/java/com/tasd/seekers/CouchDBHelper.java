@@ -21,7 +21,6 @@ public class CouchDBHelper {
 
 	public static void saveDocument(String username, InputStream file) {
 		Response response = getInstance().saveAttachment(file, username + "_curriculum.pdf", "application/pdf", username, null);
-		System.out.println("REVISION: " + response.getRev());
 	}
 
 	public static InputStream getDocument(String username) {

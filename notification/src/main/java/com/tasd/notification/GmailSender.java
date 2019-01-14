@@ -90,7 +90,6 @@ public class GmailSender {
                 .build();
         Message message = createMessageWithEmail(createEmail(destination, SENDER, subject, body));
         message = service.users().messages().send("me", message).execute();
-        System.out.println(message + "PORCOOOOOOO");
     }
 
     public static void sendMessage(String destination, String subject, String body, InputStream in)
@@ -101,7 +100,6 @@ public class GmailSender {
                 .build();
         Message message = createMessageWithEmail(getMimeMessage(destination, subject, body, in));
         service.users().messages().send("me", message).execute();
-        System.out.println(message + "PORCOOOOOOO");
     }
 
 
