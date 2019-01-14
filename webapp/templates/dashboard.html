@@ -6,6 +6,13 @@
 {% include 'sidebar_nav.html' %}
 
 {% if user.role == "JOB_CENTER" %}
+<div class="mdl-sheet__container" style="position: fixed; right: 32px; bottom: 32px; transform: rotate(0deg); height: auto; z-index: 900;">
+   <a href="{{ url_for('newJobs')}}">
+      <button id="show-dialog" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored  mdl-button--raised mdl-color-text--white">
+         <i class="material-icons">add</i>
+      </button>
+   </a>
+</div>
 <div class="mdl-grid">
   <div class="mdl-layout-spacer"></div>
   <div class="mdl-cell mdl-cell--10-col mdl-cell--12-col-tablet">
@@ -49,7 +56,6 @@
   </div>
   <div class="mdl-layout-spacer"></div>
 </div>
-
 {% endif %}
 
 {% if user.role == "SEEKER" %}
@@ -90,7 +96,7 @@
                   <h1 class="mdl-card__title-text">There aren't applications yet</h1>
                 </div>
           </div>
-        {% endif %}          
+        {% endif %}
       </div>
     </div>
   </div>
@@ -148,5 +154,3 @@
 {% include 'footer.html' %}
 
 {% endblock %}
-
-

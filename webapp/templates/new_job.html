@@ -48,7 +48,7 @@
                 <div class="col s12 m12">
                   <div class="row">
                     <div class="input-field col s12 required" id="position_container">
-                      <input id="position" name="position" value="{{job.position}}" type="text" {% if user.username != job.username %} disabled="true" {% endif %}>
+                      <input id="position" name="position" value="{{job.position}}" type="text">
                       <label class="active" for="position">Position</label>
                     </div>
                   </div>
@@ -59,7 +59,7 @@
                 <div class="col s12 m6">
                   <div class="row">
                     <div class="input-field col s12 required" id="email_container">
-                      <input id="companyName" name="companyName" value="{{job.companyName}}" type="text" {% if user.username != job.username %} disabled="true" {% endif %}>
+                      <input id="companyName" name="companyName" value="{{job.companyName}}" type="text">
                       <label class="active" for="companyName">Company Name</label>
                     </div>
                   </div>
@@ -67,7 +67,7 @@
                 <div class="col s12 m6">
                   <div class="row">
                     <div class="input-field col s12 required" id="location_container">
-                      <input id="location" name="location" value="{{job.location}}" type="text" {% if user.username != job.username %} disabled="true" {% endif %}>
+                      <input id="location" name="location" value="{{job.location}}" type="text">
                       <label class="active" for="location">Location</label>
                     </div>
                   </div>
@@ -77,69 +77,22 @@
                 <div class="col s12 m12">
                     <div class="row">
                       <div class="input-field col s12 skill_container required"  id="jobDescription_container">
-                        <textarea class="materialize-textarea" cols="40" id="jobDescription" name="jobDescription" rows="10" style="height: 44px;" {% if user.username != job.username %} disabled="true" {% endif %}>{{job.jobDescription}}</textarea>
-                        <label class="active" for="jobDescription"></label>
+                        <textarea class="materialize-textarea" cols="40" id="jobDescription" name="jobDescription" rows="10" style="height: 44px;"></textarea>
+                        <label class="active" for="jobDescription">Job Description</label>
                       </div>
                     </div>
                   </div>
               </div>
-              <input id="dataCreation" name="dataCreation" value="{{job.dateCreation}}" type="text" hidden>
-
             </div>
           </div>
 
           <div id="general_error" class="errors" hidden>
             <small class="error"></small>
           </div>
-
-          {% if user.username == job.username %}
-          <div style="overflow: auto;display: block;">
-              <span class="card-title grey-text text-darken-2">
-                Applications
-              </span>
-              {% if job.applications %}
-              <table class="mdl-data-table mdl-js-data-table" style="white-space: normal !important;">
-                <thead>
-                  <tr>
-                    <th class="myth mdl-data-table__cell--non-numeric">First name</th>
-                    <th class="myth mdl-data-table__cell--non-numeric">Last Name</th>
-                    <th class="myth mdl-data-table__cell--non-numeric">Email</th>
-                    <th class="myth mdl-data-table__cell--non-numeric">City</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for a in job.applications %}
-                    <tr onclick="document.location = '';">
-                      <td class="mdl-data-table__cell--non-numeric">{{a.firstName}}</td>
-                      <td class="mdl-data-table__cell--non-numeric">{{a.lastName}}</td>
-                      <td class="mdl-data-table__cell--non-numeric">{{a.email}}</td>
-                      <td class="mdl-data-table__cell--non-numeric">{{a.city}}</td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            {% else %}
-              <div id="error-parent" class="pres_atl-error">
-                    <div id="error-child">
-                      <h1 class="mdl-card__title-text">There aren't applications yet</h1>
-                    </div>
-              </div>
-            {% endif %}
-          </div>
-          {% endif %}
         </div>
-        {% if user.username == job.username %}
         <div class="card-action left-align" style="/*display: flex;width: 100%;flex-wrap: wrap;*/">
           <input type="button" class="btn edit-att-btn" name=save value="Save" onclick="checkForm()">
         </div>
-        {% endif %}
-
-        {% if user.role == "SEEKER" %}
-        <div class="card-action left-align" style="/*display: flex;width: 100%;flex-wrap: wrap;*/">
-            <input type="submit" name=apply class="btn edit-att-btn" value="Apply">
-        </div>
-        {% endif %}
-
       </form>
     </div>
   </div>

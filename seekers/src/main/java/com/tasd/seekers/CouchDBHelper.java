@@ -3,6 +3,7 @@ package com.tasd.seekers;
 import java.io.InputStream;
 
 import org.lightcouch.CouchDbClient;
+import org.lightcouch.NoDocumentException;
 import org.lightcouch.Response;
 
 
@@ -24,6 +25,10 @@ public class CouchDBHelper {
 	}
 
 	public static InputStream getDocument(String username) {
-		 return getInstance().find("doc_id/" + username + "_curriculum.pdf");
+		try {
+			return getInstance().find(username + "/" + username + "_curriculum.pdf");			
+		} catch (NoDocumentException e) {
+			return null;
+		}
 	}
 }

@@ -63,7 +63,7 @@ def dashboard():
         user['jobs'] = jobs
 
 
-        
+
     print(user)
 
     return render_template('dashboard.html', user=user, name_page='Dashboard')
@@ -117,7 +117,7 @@ def seeker_detail(s_username):
     if seeker.status_code != 200:
         abort(seeker.status_code)
 
-    # TODO: Controllo 
+    # TODO: Controllo
     if request.method == 'POST' and s_username == user['username']:
         r_json = request.form.to_dict(flat=True)
         r_json["role"] = "SEEKER"
@@ -165,7 +165,7 @@ def jobcenter_detail(j_username):
     if jobcenter.status_code != 200:
         abort(jobcenter.status_code)
 
-    # TODO: Controllo 
+    # TODO: Controllo
     if request.method == 'POST' and j_username == user['username']:
         r_json = request.form.to_dict(flat=True)
         r_json["role"] = "JOB_CENTER"
@@ -214,10 +214,32 @@ def jobcenter_list():
     ).json()
 
     print(jobcenters)
-    
+
     return render_template('jobcenter_list.html', user=user, jobcenters=jobcenters)
 
+@app.route('/jobs/new', methods = ['GET', 'POST'])
+def newJobs():
+    j = validate(request)
 
+    if not j:
+        abort(401)
+
+    user = {'username' : j['sub'], 'role' : j['authorities'][0]}
+    header = { "authorization" : "Bearer " + j['token']}
+
+    if request.method == 'POST':
+        r_json = request.form.to_dict(flat=True)
+        # {'position': 'cacca', 'companyName': 'cacchina', 'location': 'caccona', 'jobDescription': 'caccaccia'}
+        r_json["username"] = user["username"]
+        r = requests.post(
+            BASE_URL + "/api/centers/" + user["username"] + "/jobs/",
+            headers=header,
+            json=r_json
+            )
+        print(r)
+        if r.status_code != 201:
+            abort(r.status_code)
+    return render_template("new_job.html", user=user, job={})
 
 @app.route('/jobcenters/<j_username>/job/<job_id>', methods = ['GET', 'POST'])
 def job_detail(j_username, job_id):
@@ -229,8 +251,8 @@ def job_detail(j_username, job_id):
 
     user = {'username' : j['sub'], 'role' : j['authorities'][0]}
 
-    header = { "authorization" : "Bearer " + j['token']}  
-    
+    header = { "authorization" : "Bearer " + j['token']}
+
     # Sono seeker e mi sto applicando
     if request.method == 'POST' and 'apply' in request.form:
 
@@ -240,7 +262,7 @@ def job_detail(j_username, job_id):
             json={"username" : user["username"], "jobId" : job_id}
             )
 
-        if r.status_code != 200:
+        if r.status_code != 201:
             abort(r.status_code)
 
     elif request.method == 'POST' and 'position' in request.form:

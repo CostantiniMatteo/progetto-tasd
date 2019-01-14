@@ -24,10 +24,14 @@ public class NotificationController {
 						GmailSender.sendMessage(notification.getDestination(), notification.getSubject(), notification.getBody());
 					else {
 						InputStream in = CouchDBHelper.getDocument(notification.getUsername());
-						GmailSender.sendMessage(notification.getDestination(), notification.getSubject(), notification.getBody(), in);
+						if (in != null)
+							GmailSender.sendMessage(notification.getDestination(), notification.getSubject(), notification.getBody(), in);
+						else
+							return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).build();
 					}
 					return ResponseEntity.status(HttpStatus.OK).build();
 				} catch (Exception e) {
+					e.printStackTrace();
 					return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 				}
 			} else {

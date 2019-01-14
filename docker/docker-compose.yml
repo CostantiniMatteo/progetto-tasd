@@ -17,7 +17,6 @@ services:
       - 8761:8761
     networks:
       - progetto-tasd
-    mem_limit: 500M
 
   gateway:
     build:
@@ -78,7 +77,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 250M
+    mem_limit: 200M
 
   auth:
     build:
@@ -123,7 +122,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 250M
+    mem_limit: 200M
 
   jobcenters:
     build:
@@ -162,7 +161,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 250M
+    mem_limit: 200M
 
   jobs:
     build:
@@ -223,7 +222,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 250M
+    mem_limit: 200M
 
   pdfdb:
      image: couchdb
@@ -239,7 +238,7 @@ services:
         - progetto-tasd
      healthcheck:
        test: "exit 0"
-     mem_limit: 250M
+     mem_limit: 200M
 
   seekers:
     build:
@@ -281,7 +280,7 @@ services:
       - progetto-tasd
     healthcheck:
       test: "exit 0"
-    mem_limit: 250M
+    mem_limit: 200M
 
   applications:
     build:

@@ -3,9 +3,8 @@ package com.tasd.notification;
 import java.io.InputStream;
 
 import org.lightcouch.CouchDbClient;
+import org.lightcouch.NoDocumentException;
 import org.lightcouch.Response;
-
-
 
 public class CouchDBHelper {
 
@@ -19,11 +18,16 @@ public class CouchDBHelper {
 	}
 
 	public static void saveDocument(String username, InputStream file) {
-		Response response = getInstance().saveAttachment(file, username + "_curriculum.pdf", "application/pdf", username, null);
+		Response response = getInstance().saveAttachment(file, username + "_curriculum.pdf", "application/pdf",
+				username, null);
 		System.out.println("REVISION: " + response.getRev());
 	}
 
 	public static InputStream getDocument(String username) {
-		 return getInstance().find("doc_id/" + username + "_curriculum.pdf");
+		try {
+			return getInstance().find(username + "/" + username + "_curriculum.pdf");
+		} catch (NoDocumentException e) {
+			return null;
+		}
 	}
 }
