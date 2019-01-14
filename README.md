@@ -19,6 +19,7 @@ The service Seeker is the service responsible of managing users, and exposes CRU
 ### Prerequisites
 
 To run the whole application, a docker machine with at least 6500 MB of RAM is needed.
+It is also recommended to set at least 4 GB of RAM to the docker deamon.
 
 ### Installing
 
