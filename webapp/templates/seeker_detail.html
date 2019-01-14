@@ -198,21 +198,22 @@
               <div class="layout-row row skills">
                 {% if seeker.skills %}
                 {% for skill in seeker.skills %}
-                  <div class="col s12 m10">
-                    <div class="row">
-                      <div class="input-field col s12 skill_container required"  id="skill_container">
-                        <textarea class="materialize-textarea" cols="40" id="skill" name="skill" rows="10" style="height: 44px;">{{skill}}</textarea>
-                        <span class="remove-skill"><i style="cursor: pointer;" class="material-icons prefix">remove_circle</i></span>
-                        <label class="active" for="skill"></label>
-                      </div>
-                    </div>
-                  </div>
                   {% if loop.last %}
                     <div class="col s12 m10">
                       <div class="row">
                         <div class="input-field col s12 skill_container required"  id="skill_container">
                           <textarea class="materialize-textarea" cols="40" id="skill" name="skill" rows="10" style="height: 44px;">{{skill}}</textarea>
                           <span class="add-skill"><i style="cursor: pointer;" class="material-icons prefix">add_circle</i></span>
+                          <label class="active" for="skill"></label>
+                        </div>
+                      </div>
+                    </div>
+                  {% else %}
+                    <div class="col s12 m10">
+                      <div class="row">
+                        <div class="input-field col s12 skill_container required"  id="skill_container">
+                          <textarea class="materialize-textarea" cols="40" id="skill" name="skill" rows="10" style="height: 44px;">{{skill}}</textarea>
+                          <span class="remove-skill"><i style="cursor: pointer;" class="material-icons prefix">remove_circle</i></span>
                           <label class="active" for="skill"></label>
                         </div>
                       </div>

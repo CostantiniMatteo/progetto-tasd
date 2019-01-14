@@ -58,8 +58,11 @@
       }
     });
 
+    if ($('#cv').get(0).files.length === 0) {
+      errors_text += "Curriculum is required, ";
+    }
+
     if (errors_text.length > 0){
-      console.log("ciaoooooooooo");
       $("#general_error").removeAttr("hidden");
       $("div#general_error > small.error").html(errors_text);
     } else {
@@ -79,7 +82,7 @@
         <div class="col s12 m8 offset-m2 l8 offset-l2">
           <div class="card">
             <div class="card-content">
-              <form class="sign-up-form" method="post">
+              <form class="sign-up-form" method="post" enctype="multipart/form-data">
                 <div class="card-content">
                   <span class="card-title grey-text text-darken-2">
                     Sign up as Seeker
@@ -179,6 +182,28 @@
                       </div>
                     </div>
 
+                  </div>
+                </div>
+                <div class="section row">
+                  <div class="col s12">
+                    <h5>Curriculum Vitae</h5>
+                    
+                    <div class="layout-row row">
+                      <div class="col s12 m12">
+                        <div class="row">
+                          <div class="input-field file-field col s12 required" id="id_image_container">
+                            <div class="btn">
+                              <span>Browse</span>
+                              <input id="cv" type="file" name="cv" accept=".pdf">
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path" id="id_image" placeholder="Curriculum File" type="text">
+                            </div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="section row">

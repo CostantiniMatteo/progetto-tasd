@@ -138,7 +138,7 @@
               </thead>
               <tbody>
                 {% for job in jobcenter.jobs %}
-                  <tr onclick="document.location = '';">
+                  <tr onclick="document.location = '{{url_for('job_detail', j_username=jobcenter.username, job_id=job.id)}}';">
                     <td class="mdl-data-table__cell--non-numeric">{{job.position}}</td>
                     <td class="mdl-data-table__cell--non-numeric">{{job.jobDescription}}</td>
                     <td class="mdl-data-table__cell--non-numeric">{{job.location}}</td>

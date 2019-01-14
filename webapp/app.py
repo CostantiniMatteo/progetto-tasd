@@ -6,7 +6,7 @@ from base64 import b64decode
 
 app = Flask(__name__, static_url_path='')
 
-BASE_URL = "http://localhost:8080"
+BASE_URL = "http://gateway:8080"
 
 
 
@@ -217,6 +217,7 @@ def jobcenter_list():
 
     return render_template('jobcenter_list.html', user=user, jobcenters=jobcenters)
 
+
 @app.route('/jobs/new', methods = ['GET', 'POST'])
 def newJobs():
     j = validate(request)
@@ -229,17 +230,19 @@ def newJobs():
 
     if request.method == 'POST':
         r_json = request.form.to_dict(flat=True)
-        # {'position': 'cacca', 'companyName': 'cacchina', 'location': 'caccona', 'jobDescription': 'caccaccia'}
         r_json["username"] = user["username"]
         r = requests.post(
             BASE_URL + "/api/centers/" + user["username"] + "/jobs/",
             headers=header,
             json=r_json
-            )
+        )
         print(r)
+
         if r.status_code != 201:
             abort(r.status_code)
+
     return render_template("new_job.html", user=user, job={})
+
 
 @app.route('/jobcenters/<j_username>/job/<job_id>', methods = ['GET', 'POST'])
 def job_detail(j_username, job_id):
@@ -318,16 +321,16 @@ def job_detail(j_username, job_id):
 def login():
     if request.method == 'POST':
         data = request.form.to_dict(flat=True)
-        print("ciaooo")
+
         if not data:
             data = request.args["cred"]
 
-        print(data)
         r = requests.post(BASE_URL + "/token/generate-token", json=data)
 
         if r.status_code == 200:
-            token = r.json()['result']['token']
-            print(token)
+            r_json = r.json()
+            token = r_json['result']['token']
+            print(token)             
 
             resp = make_response(redirect(url_for('dashboard')))
             resp.set_cookie('bearer', token)
@@ -369,10 +372,36 @@ def signup_seeker():
         r_json["role"] = "SEEKER"
         r_json["skills"] = request.form.getlist("skill")
         del r_json["skill"]
-        print(r_json)
-        print(requests.post(BASE_URL + "/signup", json=r_json))
 
-        return redirect(url_for('login', cred={'username' : r_json['username'], 'password' : r_json['password']}), code=307)
+        r = requests.post(
+            BASE_URL + "/signup", 
+            json=r_json
+        )
+
+        print(r)
+
+        cred = {'username' : r_json['username'], 'password' : r_json['password']}
+
+        # Piglio il Token
+        r = requests.post(
+                BASE_URL + "/token/generate-token", 
+                json=cred
+        ).json()
+
+        token = r['result']['token']
+
+        file = request.files['cv']
+
+        # Mando il cv
+        r = requests.post(
+            BASE_URL + "/api/seekers/" + r['result']["username"] + "/cv",
+            headers={ "authorization" : "Bearer " + token},
+            files={"file" : file}
+        )
+
+        print(r)
+
+        return redirect(url_for('login', cred=cred), code=307)
 
     return render_template('signup_seeker.html')
 
