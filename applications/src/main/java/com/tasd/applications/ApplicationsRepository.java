@@ -8,4 +8,6 @@ public interface ApplicationsRepository extends JpaRepository<ApplicationsEntity
 	public List<ApplicationsEntity> findAllByUsername(String username);
 	public List<ApplicationsEntity> findAllByCenterUsername(String username);
 	public List<ApplicationsEntity> findAllByJobId(long jobId);
+	public void deleteAllByUsername(String username);
+	public void deleteAllByJobId(long jobId);
 }

@@ -6,7 +6,7 @@ from base64 import b64decode
 
 app = Flask(__name__, static_url_path='')
 
-BASE_URL = "http://localhost:8080"
+BASE_URL = "http://gateway:8080"
 
 @app.route('/', methods = ['GET'])
 def index():
@@ -318,10 +318,8 @@ def job_detail(j_username, job_id):
             seeker = requests.get(
                 BASE_URL + "/api/seekers/" + s_username,
                 headers=header
-            )
-            print(seeker)
-            if not seeker.status_code == 404:
-                job["applications"] += [seeker.json()]
+            ).json()
+            job["applications"] += [seeker]
 
     print(job)
     if request.method == 'POST' and 'delete' in request.form:

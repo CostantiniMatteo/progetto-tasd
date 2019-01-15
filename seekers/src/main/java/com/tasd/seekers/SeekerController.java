@@ -33,6 +33,9 @@ public class SeekerController {
 	@Autowired
 	private SeekerRepository seekerRepository;
 	
+	@Autowired
+	private ApplicationsProxy applicationsProxy;
+	
 	/**
 	 * This method return the list of all the seekers.
 	 * Should be called only by ADMINS.
@@ -159,7 +162,8 @@ public class SeekerController {
 		SeekerEntity seeker = seekerRepository.findByUsername(username);
 		if (seeker == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
+		
+		applicationsProxy.deleteAllByUsername(loggedUser, seeker.getUsername());
 		seekerRepository.delete(seeker);
 		return ResponseEntity.ok().build();
 
