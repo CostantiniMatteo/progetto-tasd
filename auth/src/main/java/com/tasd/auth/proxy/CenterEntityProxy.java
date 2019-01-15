@@ -24,7 +24,7 @@ public interface CenterEntityProxy {
 	public boolean existsCenter(@PathVariable("centerName") String centerName);
 
 	@RequestMapping(value = "/api/centers/{username}", method = RequestMethod.DELETE)
-	public void deleteCenter(@RequestHeader("X-User-Header") String loggedUser, String username);
+	public void deleteCenter(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username);
 
 	@RequestMapping(value = "/api/centers/{username}", method = RequestMethod.PUT)
 	public ResponseEntity<JobCenterEntity> changeCenter(@RequestHeader("X-User-Header") String loggedUser,
