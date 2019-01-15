@@ -153,11 +153,12 @@
                     <h1 class="mdl-card__title-text">There aren't jobs yet</h1>
                   </div>
             </div>
-          {% endif %}          
+          {% endif %}
         </div>
         {% if user.username == jobcenter.username %}
         <div class="card-action left-align" style="/*display: flex;width: 100%;flex-wrap: wrap;*/">
           <input type="button" class="btn edit-att-btn" value="Save" onclick="checkForm()">
+          <input type="submit" name="delete" class="btn edit-att-btn delete-att" value="Delete" style="background: rgb(244,67,54);">
         </div>
         {% endif %}
 

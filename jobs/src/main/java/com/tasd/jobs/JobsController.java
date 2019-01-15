@@ -17,6 +17,8 @@ public class JobsController {
     @Autowired
     JobsRepository jobRepository;
 
+    @Autowired
+    ApplicationsProxy applicationsProxy;
 
     @RequestMapping(value = "/api/centers/{username}/jobs/", method = RequestMethod.GET)
     public ResponseEntity<List<JobEntity>> getJobs(@PathVariable String username) {
@@ -78,7 +80,8 @@ public class JobsController {
         if (!username.equals(job.getUsername())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
+        
+        applicationsProxy.deleteAllApplicationsByJobId(loggedUser, username, jobId);
         jobRepository.deleteById(jobId);
         return ResponseEntity.ok().build();
     }

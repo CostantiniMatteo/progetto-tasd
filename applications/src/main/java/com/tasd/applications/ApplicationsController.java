@@ -9,7 +9,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.tasd.applications.UserEntity.Role;
 
 import feign.FeignException;
@@ -122,6 +129,26 @@ public class ApplicationsController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
+	@RequestMapping(value = "/api/seekers/{username}/applications", method = RequestMethod.DELETE)
+	@Transactional
+	public ResponseEntity deleteAllApplicationsByUsername(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
+		if (!username.equals(loggedUser))
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		
+		applicationsRepository.deleteAllByUsername(username);
+		return ResponseEntity.ok().build();
+	}
+	
+	@RequestMapping(value = "/api/centers/{username}/jobs/{jobId}/applications", method = RequestMethod.DELETE)
+	@Transactional
+	public ResponseEntity deleteAllApplicationsByJobId(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username, @PathVariable long jobId) {
+		if (!username.equals(loggedUser))
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		
+		applicationsRepository.deleteAllByJobId(jobId);
+		return ResponseEntity.ok().build();
+	}
+	
 	@RequestMapping(value = "/api/seekers/{username}/applications/{applicationId}", method = RequestMethod.DELETE)
 	public ResponseEntity<ApplicationsEntity> deleteApplication(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username, @PathVariable long applicationId) {

@@ -8,8 +8,6 @@ app = Flask(__name__, static_url_path='')
 
 BASE_URL = "http://gateway:8080"
 
-
-
 @app.route('/', methods = ['GET'])
 def index():
     return render_template('index.html')
@@ -135,12 +133,16 @@ def seeker_detail(s_username):
             )
 
         print(r)
-
-
     seeker = seeker.json()
-
     print(seeker)
-
+    if request.method == 'POST' and 'delete' in request.form:
+        r = requests.delete(
+            BASE_URL + "/users/" + s_username,
+            headers=header
+            )
+        resp = make_response(redirect(url_for('index')))
+        resp.set_cookie('bearer', '', expires=0)
+        return resp
     return render_template('seeker_detail.html', user=user, seeker=seeker)
 
 
@@ -191,6 +193,15 @@ def jobcenter_detail(j_username):
     jobcenter['jobs'] = jobs
 
     print(jobcenter)
+
+    if request.method == 'POST' and 'delete' in request.form:
+        r = requests.delete(
+            BASE_URL + "/users/" + j_username,
+            headers=header
+            )
+        resp = make_response(redirect(url_for('index')))
+        resp.set_cookie('bearer', '', expires=0)
+        return resp
 
     return render_template('jobcenter_detail.html', user=user, jobcenter=jobcenter)
 
@@ -308,11 +319,16 @@ def job_detail(j_username, job_id):
                 BASE_URL + "/api/seekers/" + s_username,
                 headers=header
             ).json()
-
             job["applications"] += [seeker]
 
     print(job)
-
+    if request.method == 'POST' and 'delete' in request.form:
+        r = requests.delete(
+            BASE_URL + "/api/centers/" + j_username + "/jobs/" + job_id,
+            headers=header
+            )
+        resp = make_response(redirect(url_for('dashboard')))
+        return resp
     return render_template('job_detail.html', user=user, job=job)
 
 
@@ -330,7 +346,7 @@ def login():
         if r.status_code == 200:
             r_json = r.json()
             token = r_json['result']['token']
-            print(token)             
+            print(token)
 
             resp = make_response(redirect(url_for('dashboard')))
             resp.set_cookie('bearer', token)
@@ -374,7 +390,7 @@ def signup_seeker():
         del r_json["skill"]
 
         r = requests.post(
-            BASE_URL + "/signup", 
+            BASE_URL + "/signup",
             json=r_json
         )
 
@@ -384,7 +400,7 @@ def signup_seeker():
 
         # Piglio il Token
         r = requests.post(
-                BASE_URL + "/token/generate-token", 
+                BASE_URL + "/token/generate-token",
                 json=cred
         ).json()
 
