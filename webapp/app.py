@@ -318,9 +318,10 @@ def job_detail(j_username, job_id):
             seeker = requests.get(
                 BASE_URL + "/api/seekers/" + s_username,
                 headers=header
-            ).json()
-
-            job["applications"] += [seeker]
+            )
+            print(seeker)
+            if not seeker.status_code == 404:
+                job["applications"] += [seeker.json()]
 
     print(job)
     if request.method == 'POST' and 'delete' in request.form:
