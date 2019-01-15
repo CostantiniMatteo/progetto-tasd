@@ -21,10 +21,10 @@ public interface SeekerEntityProxy {
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.DELETE)
 	public ResponseEntity deleteSeeker(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username);
-	
+
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.PUT)
-	public ResponseEntity changeSeeker(@RequestHeader("X-User-Header") String loggedUser, 
-								@PathVariable String username, 
+	public ResponseEntity changeSeeker(@RequestHeader("X-User-Header") String loggedUser,
+								@PathVariable String username,
 								@RequestBody SeekerEntity seekerEntity);
 
 }
