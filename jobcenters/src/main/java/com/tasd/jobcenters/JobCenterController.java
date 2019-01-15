@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class JobCenterController {
 
 	@Autowired
-	JobCenterRepository jobCenterRepository;
+	private JobCenterRepository jobCenterRepository;
 
+	@Autowired
+	private JobsProxy jobsProxy;
 
 	@RequestMapping(value = "/api/centers", method = RequestMethod.GET)
 	public List<JobCenterEntity> getJobCenters() {
@@ -44,6 +46,7 @@ public class JobCenterController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 		JobCenterEntity jobCenter = jobCenterRepository.findByUsername(username);
+		jobsProxy.deleteAllByUsername(loggedUser, username);
 		jobCenterRepository.delete(jobCenter);
 		return ResponseEntity.ok().build();
 	}
