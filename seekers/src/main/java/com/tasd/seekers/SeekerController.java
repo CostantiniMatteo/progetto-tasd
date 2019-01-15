@@ -164,6 +164,7 @@ public class SeekerController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		
 		applicationsProxy.deleteAllByUsername(loggedUser, seeker.getUsername());
+		CouchDBHelper.deleteDocument(username);
 		seekerRepository.delete(seeker);
 		return ResponseEntity.ok().build();
 
