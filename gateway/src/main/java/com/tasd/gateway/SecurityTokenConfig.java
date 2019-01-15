@@ -16,7 +16,6 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private JwtConfig jwtConfig;
 
-	// TODO: Alcune rotte devono essere accessibili anche se non autenticati
 	@Override
   	protected void configure(HttpSecurity http) throws Exception {
     	 http

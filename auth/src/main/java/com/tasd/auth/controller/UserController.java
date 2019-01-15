@@ -24,10 +24,6 @@ import com.tasd.auth.service.UserService;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 
-
-
-// TODO: modificare update e usare solo user
-// TODO: Testare
 public class UserController {
 
     @Autowired
