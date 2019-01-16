@@ -1,13 +1,17 @@
 package com.tasd.seekers;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+import org.lightcouch.Attachment;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.NoDocumentException;
+import org.lightcouch.Params;
 import org.lightcouch.Response;
 
 public class CouchDBHelper {
@@ -22,21 +26,42 @@ public class CouchDBHelper {
 		return db;
 	}
 
+//	public static void saveDocumentOld(String username, InputStream file) {
+//		Response response = getInstance().saveAttachment(file, username + "_curriculum.pdf", "application/pdf",
+//				username, null);
+//		revs.put(username, response.getRev());
+//	}
+	
 	public static void saveDocument(String username, InputStream file) {
-		Response response = getInstance().saveAttachment(file, username + "_curriculum.pdf", "application/pdf",
-				username, null);
-		revs.put(username, response.getRev());
+		byte[] bytes = null;
+		try {
+			bytes = IOUtils.toByteArray(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String data = Base64.encodeBase64String(bytes);
+		 
+		Attachment attachment = new Attachment(data, "application/pdf");
+		PdfDocument pdf = new PdfDocument(); 
+		pdf.setId(username);
+		pdf.addAttachment(username + "_curriculum.pdf", attachment);
+		
+		getInstance().save(pdf);
 	}
-
+	
 	public static InputStream getDocument(String username) {
 		try {
-			return getInstance().find(username + "/" + username + "_curriculum.pdf");
+			PdfDocument pdf =  getInstance().find(PdfDocument.class, username, new Params().attachments());
+			String base64Data = pdf.getAttachments().get(username + "_curriculum.pdf").getData();
+			byte[] doc = Base64.decodeBase64(base64Data);
+			return new ByteArrayInputStream(doc);
 		} catch (NoDocumentException e) {
 			return null;
 		}
 	}
 
 	public static void deleteDocument(String username) {
-		getInstance().remove(username, revs.get(username));
+//		getInstance().remove(username, revs.get(username));
+		getInstance().remove(getInstance().find(PdfDocument.class, username));
 	}
 }
