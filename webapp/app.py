@@ -368,7 +368,6 @@ def logout():
 
 @app.route('/signup/jobcenter', methods = ['GET', 'POST'])
 def signup_jobcenter():
-
     if request.method == 'POST':
         r_json = request.form.to_dict(flat=True)
         r_json["role"] = "JOB_CENTER"
