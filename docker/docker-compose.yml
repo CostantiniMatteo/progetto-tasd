@@ -13,8 +13,6 @@ services:
       - LOGGING_LEVEL_COM_NETFLIX_DISCOVERY=DEBUG
     expose:
       - 8761
-    ports:
-      - 8761:8761
     networks:
       - progetto-tasd
 
@@ -26,8 +24,6 @@ services:
     container_name: gateway
     expose:
       - 8080
-    ports:
-      - 8080:8080
     networks:
       - progetto-tasd
     depends_on:
@@ -48,8 +44,6 @@ services:
     container_name: advisor
     expose:
       - 8700
-    ports:
-      - 8700:8700
     networks:
       - progetto-tasd
     depends_on:
@@ -69,8 +63,6 @@ services:
       - POSTGRES_PASSWORD=1234
     expose:
       - 5432
-    ports:
-      - 5432:5432
     volumes:
       - authdbdata:/var/lib/postgresql/data
     networks:
@@ -87,8 +79,6 @@ services:
     container_name: auth
     expose:
       - 9100
-    ports:
-      - 9100:9100
     networks:
       - progetto-tasd
     depends_on:
@@ -114,8 +104,6 @@ services:
       - POSTGRES_PASSWORD=1234
     expose:
       - 5432
-    ports:
-      - 5433:5432
     volumes:
       - centersdbdata:/var/lib/postgresql/data
     networks:
@@ -132,8 +120,6 @@ services:
     container_name: jobcenters
     expose:
       - 8200
-    ports:
-      - 8200:8200
     networks:
       - progetto-tasd
     depends_on:
@@ -153,8 +139,6 @@ services:
       - POSTGRES_PASSWORD=1234
     expose:
       - 5432
-    ports:
-      - 5434:5432
     volumes:
       - jobsdbdata:/var/lib/postgresql/data
     networks:
@@ -171,8 +155,6 @@ services:
     container_name: jobs
     expose:
       - 8400
-    ports:
-      - 8400:8400
     networks:
       - progetto-tasd
     depends_on:
@@ -193,8 +175,6 @@ services:
     container_name: search
     expose:
       - 8500
-    ports:
-      - 8500:8500
     networks:
       - progetto-tasd
     depends_on:
@@ -214,8 +194,6 @@ services:
       - POSTGRES_PASSWORD=1234
     expose:
       - 5432
-    ports:
-      - 5435:5432
     volumes:
       - seekersdbdata:/var/lib/postgresql/data
     networks:
@@ -226,8 +204,6 @@ services:
 
   pdfdb:
      image: couchdb
-     ports:
-        - 5984:5984
      container_name: pdfdb
      environment:
         - COUCHDB_USER=couchdb
@@ -248,8 +224,6 @@ services:
     container_name: seekers
     expose:
       - 8300
-    ports:
-      - 8300:8300
     networks:
       - progetto-tasd
     depends_on:
@@ -272,8 +246,6 @@ services:
       - POSTGRES_PASSWORD=1234
     expose:
       - 5432
-    ports:
-      - 5437:5432
     volumes:
       - applicationsdbdata:/var/lib/postgresql/data
     networks:
@@ -290,8 +262,6 @@ services:
     container_name: applications
     expose:
       - 8600
-    ports:
-      - 8600:8600
     networks:
       - progetto-tasd
     depends_on:
@@ -313,9 +283,6 @@ services:
     expose:
       - 8900
       - 8888
-    ports:
-      - 8900:8900
-      - 8888:8888
     networks:
       - progetto-tasd
     depends_on:
@@ -348,14 +315,6 @@ services:
      mem_limit: 500M
 
 
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   expose:
-  #     - 8080
-  #   networks:
-  #     - progetto-tasd
-
 volumes:
   pdfdbdata:
   authdbdata:
@@ -363,6 +322,7 @@ volumes:
   jobsdbdata:
   seekersdbdata:
   applicationsdbdata:
+
 
 networks:
   progetto-tasd:
