@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * api/seekers/ GET, POST
  * api/seekers/{username}/ GET, DELETE, PUT
- * api/seekers/{username}/skills/ GET, POST, PUT
+ * api/seekers/{username}/skills/ GET, PUT
  * api/seekers/{username}/skills/{skillId}/ DELETE
  *
  * @author thekeymaker
@@ -32,10 +32,10 @@ public class SeekerController {
 
 	@Autowired
 	private SeekerRepository seekerRepository;
-	
+
 	@Autowired
 	private ApplicationsProxy applicationsProxy;
-	
+
 	/**
 	 * This method return the list of all the seekers.
 	 * Should be called only by ADMINS.
@@ -71,7 +71,7 @@ public class SeekerController {
 	@RequestMapping(value = "/api/seekers/{username}", method = RequestMethod.GET)
 	public ResponseEntity<SeekerEntity> getJobSeeker(@RequestHeader("X-User-Header") String loggedUser,
 			@PathVariable String username) {
-		
+
 
 		SeekerEntity seekerEntity = seekerRepository.findByUsername(username);
 		if (seekerEntity == null)
@@ -102,7 +102,7 @@ public class SeekerController {
 		if(!checkFieldUpdate(seekerEntity)) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
-		
+
 		SeekerEntity seekerEntityOld = seekerRepository.findByUsername(username);
 		seekerEntityOld.setUsername(seekerEntity.getUsername());
 		seekerEntityOld.setFirstName(seekerEntity.getFirstName());
@@ -113,7 +113,7 @@ public class SeekerController {
 		seekerRepository.save(seekerEntityOld);
 		return ResponseEntity.ok(seekerEntityOld);
 	}
-	
+
 	private boolean checkFieldUpdate(SeekerEntity newSeeker) {
 		if(newSeeker.getUsername()==null) {
 			return false;
@@ -145,7 +145,7 @@ public class SeekerController {
 		}
 		return ResponseEntity.ok().build();
 	}
-	
+
 	/**
 	 * This method is used to delete personal information of the registered seeker.
 	 *
@@ -162,7 +162,7 @@ public class SeekerController {
 		SeekerEntity seeker = seekerRepository.findByUsername(username);
 		if (seeker == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		
+
 		applicationsProxy.deleteAllByUsername(loggedUser, seeker.getUsername());
 		CouchDBHelper.deleteDocument(username);
 		seekerRepository.delete(seeker);

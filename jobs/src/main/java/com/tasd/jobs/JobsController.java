@@ -44,21 +44,20 @@ public class JobsController {
         JobEntity j = jobRepository.save(job);
         return ResponseEntity.created(new URI("/api/centers/" + username + "/jobs/" + j.getId())).body(j);
     }
-    
+
 	@RequestMapping(value = "/api/centers/{username}/jobs", method = RequestMethod.DELETE)
 	public ResponseEntity deleteAllJobsByUsername(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username) {
 		if (!username.equals(loggedUser))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		
+
 		for (JobEntity job: jobRepository.findAllByUsername(username)) {
 			deleteJob(loggedUser, username, job.getId());
 		}
-		
+
 		return ResponseEntity.ok().build();
-		
+
 	}
-//	TODO call deleteJob(String, String, long) for each job of the jobcenter
-    
+
     @RequestMapping(value = "/api/centers/{username}/jobs/{jobId}", method = RequestMethod.GET)
     public ResponseEntity<JobEntity> getJob(@RequestHeader("X-User-Header") String loggedUser, @PathVariable String username, @PathVariable long jobId) {
 
@@ -93,7 +92,7 @@ public class JobsController {
         if (!username.equals(job.getUsername())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        
+
         applicationsProxy.deleteAllApplicationsByJobId(loggedUser, username, jobId);
         jobRepository.deleteById(jobId);
         return ResponseEntity.ok().build();

@@ -1,32 +1,36 @@
-SEEKER SERVICE
-api/seekers/ GET, POST, PUT, DELETE
+SEEKERS SERVICE
+api/seekers/ GET, POST
 api/seekers/{user_id}/ GET, PUT, DELETE
-api/seekers/{user_id}/skills/ GET, POST
-api/seekers/{user_id}/skills/{skill_id}/ PUT, DELETE
+api/seekers/{user_id}/skills/ GET, PUT
+api/seekers/{user_id}/skills/{skill_id}/ DELETE
+api/seekers/{user_id}/cv POST
 
 JOB ADVISOR SERVICE
 api/seekers/{user_id}/suggestions/ GET
 
-APPLICATION SERVICE
-api/seekers/{user_id}/applications/ GET, POST
+APPLICATIONS SERVICE
+api/centers/{user_id}/applications/ GET
+api/centers/{user_id}/jobs/{job_id}/applications/ GET, DELETE
+api/seekers/{user_id}/applications/ GET, POST, DELETE
 api/seekers/{user_id}/applications/{application_id}/ GET, PUT, DELETE
 
-JOB CENTER SERVICE
+JOB CENTERS SERVICE
 api/centers/ GET, POST
-api/centers/{center_id}/ GET, PUT, DELETE
+api/centers/{user_id}/ GET, PUT, DELETE
 
-JOB SERVICE
-api/centers/{center_id}/jobs/ GET, POST
-api/centers/{center_id}/jobs/{job_id}/ GET, PUT, DELETE
+JOBS SERVICE
+api/centers/{user_id}/jobs/ GET, POST, DELETE
+api/centers/{user_id}/jobs/{job_id}/ GET, PUT, DELETE
 
 SEARCH SERVICE
-api/jobs/search?q={query} GET
+api/jobs/search/ GET
 
 AUTHENTICATION SERVICE
 signup/ POST
 token/generate-token/ POST
+users/ GET
+users/{user_id}/ GET, PUT, DELETE
+recover-email/{user_id}/ GET
 
-MAILING SERVICE
-api/mail/publish POST
-api/mail/subscribe POST
-api/mail/unsubscribe DELETE
+NOTIFICATIONS SERVICE
+api/send-notification/ POST
